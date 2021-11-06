@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ "$3" == "1" ]]; then
+    remoteExists=$(git ls-remote --heads origin $(git rev-parse --abbrev-ref HEAD) | wc -l)
+    if [[ "$(($remoteExists + 0))" == "1" ]]; then
+        echo "Auto-Pulling branch..."
+        git pull
+    fi
+    echo "Auto-Updating dependencies..."
+    go mod vendor
+fi
