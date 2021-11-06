@@ -1,6 +1,13 @@
 go-test:
 	go test ./...
 
+go-lint:
+	golangci-lint -c ../.golangci.yaml run ./...
+
+go-mod:
+	go mod tidy
+	go mod vendor
+
 format:
 	gofumpt -l -w .
 

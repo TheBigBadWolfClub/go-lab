@@ -1,3 +1,16 @@
+# Go Lab
+
+Go Monorepo with code examples on using GO
+
+### Howls
+
+
+* 
+
+<hr>
+
+
+=======
 # GO Project
 
 This is a boilerplate template for new GO projects. 
@@ -21,17 +34,12 @@ Follow this guide:
 
 Afterwards you can use `make golint` to execute the linter.
 
+Basic information on project structure and executions:
+- [TheBigBadWolfClub / go-project-seed](https://github.com/TheBigBadWolfClub/go-project-seed)
 
 
-### Git-Hooks
-In order to make sure you commit only correctly formatted files please use the `make install-hooks` command to install the githooks.
-The following hooks will be installed:
-- post-checkout: automatically runs `go mod vendor` after checkout to have the correct dependencies for the branch
-- pre-commit: automatically runs `go mod tidy` and `go mod vendor` and stops if that changed your go.mod or go.sum (which most likely means there were unnecessary dependencies in the go.mod before)
-- pre-push: automatically runs `make check` before push to make sure you are not pushing bad code
 
-## Versioning
-*(This is a TL;DR version of this: https://blog.golang.org/publishing-go-modules#TOC_3.)*
+<hr>
 
 Go modules use a semantic version, thats why our version names look like this vMAJOR.MINOR.PATCH
 
@@ -48,6 +56,19 @@ git push origin v1.2.3
 ```
 
 The version v1.2.3 then will be available to be required via go mod by all projects.
+>>>>>>> 1f9e03d... Initial commit
+
+
+### Git-Hooks
+In order to make sure you commit only correctly formatted files please use the `make install-hooks` command to install the githooks.
+The following hooks will be installed:
+- post-checkout: automatically runs `go mod vendor` after checkout to have the correct dependencies for the branch
+- pre-commit: automatically runs `go mod tidy` and `go mod vendor` and stops if that changed your go.mod or go.sum (which most likely means there were unnecessary dependencies in the go.mod before)
+- pre-push: automatically runs `make check` before push to make sure you are not pushing bad code
+
+## Versioning
+*(This is a TL;DR version of this: https://blog.golang.org/publishing-go-modules#TOC_3.)*
+
 
 
 ## License information
