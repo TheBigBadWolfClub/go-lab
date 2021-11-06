@@ -1,0 +1,55 @@
+version: '3.9'
+
+
+services:
+  mariadb:
+    container_name: golab-mariadb
+    profiles: [ "dev", "integration" ]
+    hostname: mariadb
+    image: mariadb:latest
+    ports:
+      - "11306:3306"
+    restart: always
+    volumes:
+      - "./mariadb-schemas/pets.sql:/docker-entrypoint-initdb.d/pets.sql"
+    environment:
+      MARIADB_ROOT_PASSWORD: toor
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    networks:
+      - private-net
+  mongodb:
+    container_name: golab-mongo
+    profiles: [ "dev", "integration" ]
+    hostname: mongo
+    image: mongo:latest
+    ports:
+      - "11017:27017"
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    networks:
+      - private-net
+  mongo-seed:
+    container_name: golab-mongo-seed
+    profiles: [ "dev", "integration" ]
+    hostname: mongo-seed
+    build:
+      context: ../
+      dockerfile: build/mongo-seed/Dockerfile
+      network: host
+    networks:
+      - private-net
+    volumes:
+      - "./mongo-schemas:/collections"
+    environment:
+      MONGO_HOST: mongo
+networks:
+  private-net:
