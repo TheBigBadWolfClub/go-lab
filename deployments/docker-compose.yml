@@ -11,7 +11,7 @@ services:
       - "11306:3306"
     restart: always
     volumes:
-      - "./mariadb-schemas/pets.sql:/docker-entrypoint-initdb.d/pets.sql"
+      - "./mariadb-schemas/tales.sql:/docker-entrypoint-initdb.d/tales.sql"
     environment:
       MARIADB_ROOT_PASSWORD: toor
     deploy:
