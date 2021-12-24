@@ -25,6 +25,30 @@ Set of tools and private libs to group common functionality required on more tha
 
 <hr>
 
+## Module management 
+
+>__riddle /ˈrɪd(ə)l/ riddles__
+><br>a question or statement intentionally phrased so as to require ingenuity in ascertaining its answer or meaning.
+><br>*"they started asking riddles and telling jokes"*
+
+#### create
+```shell
+# create new module
+# example creat a module named riddles under spells
+> mkdir spells/riddle
+> cd spells/riddle
+> go mod init github.com/TheBigBadWolfClub/go-lab/spells/riddle
+ 
+```
+
+#### release
+```shell
+# release version v0.0.1 of spells/riddle
+> git tag spells/riddle/v0.0.1
+> git push origin --tags
+
+```
+
 # GO Project
 
 
