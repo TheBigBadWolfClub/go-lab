@@ -1,4 +1,4 @@
-module github.com/TheBigBadWolfClub/go-lab/howls/shared
+module github.com/TheBigBadWolfClub/go-lab/spells/foundation
 
 go 1.17
 
