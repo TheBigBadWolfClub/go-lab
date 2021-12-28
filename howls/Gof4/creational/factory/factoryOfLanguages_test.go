@@ -11,18 +11,18 @@ func Test_getLanguage(t *testing.T) {
 	}
 	tests := []struct {
 		name     string
-		langType string
+		langType LangType
 		want     LanguageEr
 		wantErr  bool
 	}{
 		{
 			name:     "factory of go",
-			langType: "go",
+			langType: goLang,
 			want:     newGo(),
 			wantErr:  false,
 		}, {
 			name:     "factory of rust",
-			langType: "rust",
+			langType: rustLang,
 			want:     newRust(),
 			wantErr:  false,
 		}, {
