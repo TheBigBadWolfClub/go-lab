@@ -1,4 +1,4 @@
-package riddle
+package riddles
 
 import (
 	"reflect"
@@ -150,6 +150,59 @@ func TestFibonacciSequence(t *testing.T) {
 
 			if got := FibonacciSequence(tt.args.n); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("FibonacciSequence() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGreatestCommonDivisor(t *testing.T) {
+	type args struct {
+		x uint
+		y uint
+	}
+	tests := []struct {
+		name string
+		args args
+		want uint
+	}{
+		{
+			name: "GreatestCommonDivisor of 0, 0",
+			args: args{x: 0, y: 0},
+			want: 0,
+		}, {
+			name: "GreatestCommonDivisor of 0, 1",
+			args: args{x: 0, y: 1},
+			want: 1,
+		}, {
+			name: "GreatestCommonDivisor of 1, 1",
+			args: args{x: 1, y: 1},
+			want: 1,
+		}, {
+			name: "GreatestCommonDivisor of 5, 10",
+			args: args{x: 5, y: 10},
+			want: 5,
+		}, {
+			name: "GreatestCommonDivisor of 10, 5",
+			args: args{x: 10, y: 5},
+			want: 5,
+		}, {
+			name: "GreatestCommonDivisor of 10, 10",
+			args: args{x: 10, y: 10},
+			want: 10,
+		}, {
+			name: "GreatestCommonDivisor of 36, 54",
+			args: args{x: 36, y: 54},
+			want: 18,
+		}, {
+			name: "GreatestCommonDivisor of 54, 36",
+			args: args{x: 54, y: 36},
+			want: 18,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GreatestCommonDivisor(tt.args.x, tt.args.y); got != tt.want {
+				t.Errorf("GreatestCommonDivisor() = %v, want %v", got, tt.want)
 			}
 		})
 	}

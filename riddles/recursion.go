@@ -1,4 +1,4 @@
-package riddle
+package riddles
 
 func Factorial(i uint) uint {
 	if i <= 1 {
@@ -30,4 +30,12 @@ func FibonacciSequence(n uint) []uint {
 	}
 
 	return append(FibonacciSequence(n-1), FibonacciNumber(n-2)+FibonacciNumber(n-1))
+}
+
+func GreatestCommonDivisor(x, y uint) uint {
+	if y == 0 {
+		return x
+	}
+
+	return GreatestCommonDivisor(y, x%y)
 }
