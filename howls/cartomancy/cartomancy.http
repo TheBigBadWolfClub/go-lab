@@ -1,0 +1,26 @@
+
+###
+// @no-log
+GET http://localhost:8081/api/deck
+Accept: application/json
+
+###
+// @no-log
+GET http://localhost:8081/api/deck/shuffle
+Accept: application/json
+
+###
+// @no-log
+GET http://localhost:8081/api/deck/deal?players=2&cards=3
+Accept: application/json
+
+###
+// @no-log
+GET http://localhost:8081/api/deck/suit/spades
+Accept: application/json
+
+
+###
+// @no-log
+GET http://localhost:8081/api/deck/card/search?card=Q&suit=spades
+Accept: application/json

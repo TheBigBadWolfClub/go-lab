@@ -9,8 +9,9 @@
 module to test the implementation of some Gof4 design patterns in GO
 
 
-### Creational Design Patterns
 <hr>
+
+### Creational Design Patterns
 
 - __Abstract Factory:__ Allows the creation of objects without specifying their concrete type.
 - __Builder:__ Uses to create complex objects.
@@ -18,8 +19,9 @@ module to test the implementation of some Gof4 design patterns in GO
 - __Prototype:__ Creates a new object from an existing object.
 - __Singleton:__ Ensures only one instance of an object is created.
 
-### Structural Design Patterns
 <hr>
+
+### Structural Design Patterns
 
 - __Adapter__ Allows for two incompatible classes to work together by wrapping an interface around one of the existing classes.
 - __Bridge__ Decouples an abstraction so two classes can vary independently.
@@ -29,8 +31,9 @@ module to test the implementation of some Gof4 design patterns in GO
 - __Flyweight__ Reduces the cost of complex object models.
 - __Proxy__ Provides a placeholder interface to an underlying object to control access, reduce cost, or reduce complexity.
 
-### Behavior Design Patterns
 <hr>
+
+### Behavior Design Patterns
 
 - __Chain of Responsibility:__ Delegates commands to a chain of processing objects.
 - __Command:__ Creates objects which encapsulate actions and parameters.
