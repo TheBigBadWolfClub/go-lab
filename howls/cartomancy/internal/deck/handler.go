@@ -2,10 +2,11 @@ package deck
 
 import (
 	"encoding/json"
-	"github.com/TheBigBadWolfClub/go-lab/spells/foundation/pkg/rest"
-	"github.com/go-chi/chi/v5"
 	"net/http"
 	"strconv"
+
+	"github.com/TheBigBadWolfClub/go-lab/spells/foundation/pkg/rest"
+	"github.com/go-chi/chi/v5"
 )
 
 type handler struct {
@@ -32,7 +33,6 @@ func (h *handler) SubRoutes(r chi.Router) {
 }
 
 func (h *handler) full(w http.ResponseWriter, _ *http.Request) {
-
 	marshal, err := json.Marshal(h.deck)
 	if err != nil {
 		er := http.StatusInternalServerError
@@ -119,7 +119,6 @@ func (h *handler) shuffle(w http.ResponseWriter, _ *http.Request) {
 }
 
 func (h *handler) deal(w http.ResponseWriter, r *http.Request) {
-
 	nPlayersStr := r.URL.Query().Get("players")
 	nPlayers, err := strconv.Atoi(nPlayersStr)
 	if err != nil {

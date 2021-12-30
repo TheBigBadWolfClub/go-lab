@@ -40,7 +40,6 @@ func TestLevel_String(t *testing.T) {
 }
 
 func Test_wolflog_Debug(t *testing.T) {
-
 	defaultWriter := &mockOutput{}
 	defaultLog := New(DEBUG)
 	defaultLog.Output(defaultWriter)

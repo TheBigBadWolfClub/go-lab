@@ -5,7 +5,6 @@ import (
 )
 
 func TestNewPersonBuilder(t *testing.T) {
-
 	pb := NewPersonBuilder()
 	pb.Lives().
 		At("The Square").

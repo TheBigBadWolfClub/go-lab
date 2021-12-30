@@ -2,9 +2,10 @@ package config
 
 import (
 	"errors"
-	"gopkg.in/yaml.v2"
 	"os"
 	"path/filepath"
+
+	"gopkg.in/yaml.v2"
 )
 
 var ErrUnsupportedType = errors.New("unsupported file type. Supported yml, yaml")

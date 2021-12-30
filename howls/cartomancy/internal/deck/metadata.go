@@ -2,8 +2,10 @@ package deck
 
 import "strings"
 
-const sepString = ":"
-const STATIC = ""
+const (
+	sepString = ":"
+	STATIC    = ""
+)
 
 // CardStr represents a substring of CardMeta
 type CardStr string
@@ -59,9 +61,11 @@ func (c CardStr) Valid() bool {
 	return false
 }
 
-type SuitMeta string
-type CardMeta string
-type MetaID int
+type (
+	SuitMeta string
+	CardMeta string
+	MetaID   int
+)
 
 const (
 	SPADES   SuitMeta = "1:♠:spades:black"

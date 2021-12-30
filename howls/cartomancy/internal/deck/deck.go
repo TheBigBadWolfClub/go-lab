@@ -72,7 +72,6 @@ func (d Deck) shuffle() Deck {
 }
 
 func (d Deck) deal(players, cards int) Deals {
-
 	deals := Deals{
 		Undeal: d.shuffle(),
 		Deals:  make([]Deck, players),

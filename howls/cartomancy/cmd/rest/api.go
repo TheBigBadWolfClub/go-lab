@@ -1,14 +1,14 @@
 package main
 
 import (
+	"net/http"
+
 	"github.com/TheBigBadWolfClub/go-lab/howls/cartomancy/internal/deck"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"net/http"
 )
 
 func main() {
-
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
@@ -21,8 +21,6 @@ func main() {
 }
 
 func api(r chi.Router) {
-
 	handler := deck.NewHandler(deck.NewDeck())
 	r.Route("/deck", handler.SubRoutes)
-
 }

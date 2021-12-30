@@ -14,7 +14,6 @@ const (
 )
 
 func Scan(ports ...uint16) []uint16 {
-
 	descriptors := maxDescriptors() / 2
 	addr := net.TCPAddr{
 		IP:   nil,
@@ -51,7 +50,6 @@ func Scan(ports ...uint16) []uint16 {
 }
 
 func IsTcpListening(addr net.TCPAddr) error {
-
 	network := addr.String()
 	tcpDstAddr, err := net.ResolveTCPAddr(TCP, network)
 	if err != nil {
@@ -66,7 +64,6 @@ func IsTcpListening(addr net.TCPAddr) error {
 }
 
 func IsUdpListening(addr net.UDPAddr) error {
-
 	dstAddr, err := net.ResolveUDPAddr(UDP, addr.String())
 	if err != nil {
 		return err
@@ -90,7 +87,7 @@ func IsUdpListening(addr net.UDPAddr) error {
 // opening too much tcp connections, can cause, OS error
 func maxDescriptors() int {
 	output, _ := exec.Command("ulimit", "-n").Output()
-	//output, err := search.Command("launchctl", "limit", "maxfiles").Output()
+	// output, err := search.Command("launchctl", "limit", "maxfiles").Output()
 
 	str := string(output)
 	str = strings.TrimSuffix(str, "\n")

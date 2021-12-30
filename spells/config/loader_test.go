@@ -16,14 +16,16 @@ func TestLoad_FileOpen(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{name: "success open yaml",
+		{
+			name: "success open yaml",
 			args: args{
 				filename: "config.yaml",
 				data:     &struct{}{},
 			},
 			wantErr: false,
 		},
-		{name: "fail to open yaml",
+		{
+			name: "fail to open yaml",
 			args: args{
 				filename: "not_exist.yaml",
 				data:     &struct{}{},
@@ -77,7 +79,6 @@ func TestLoad(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-
 			if err := Load(tt.args.filename, tt.args.data); err != nil {
 				t.Errorf("Load() unexpected error = %v", err)
 			}

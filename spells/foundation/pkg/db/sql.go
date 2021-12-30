@@ -1,15 +1,15 @@
 package db
 
 import (
+	"log"
+
 	"github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"log"
 )
 
 const driverName = "mysql"
 
 func ConnectDB(config *mysql.Config) *sqlx.DB {
-
 	db, err := sqlx.Connect(driverName, config.FormatDSN())
 	if err != nil {
 		log.Fatalf("error connecting to DB config file: %v", err)

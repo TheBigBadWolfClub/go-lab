@@ -61,7 +61,6 @@ func (w *wolflog) Info(format string, v ...interface{}) {
 
 func (w *wolflog) Warn(format string, v ...interface{}) {
 	w.writef(WARN, format, v...)
-
 }
 
 func (w *wolflog) Error(format string, v ...interface{}) {

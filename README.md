@@ -35,6 +35,7 @@ Set of tools and private libs to group common functionality required on more tha
 Small unrelated pieces of GO code, to clarify, make proven of  or deepen the knowledge in GO
 
 <hr>
+
 ## Module management
 
 #### create
@@ -55,7 +56,29 @@ Small unrelated pieces of GO code, to clarify, make proven of  or deepen the kno
 
 ```
 
-# GO Project
+
+<hr>
+
+# Source maintenance
+
+#### linting
+```shell
+
+# install
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+# help
+golangci-lint help linters
+
+# run
+golangci-lint run ./...
+
+```
+
+
+<hr>
+
+# GO Project Layout
 
 
 
