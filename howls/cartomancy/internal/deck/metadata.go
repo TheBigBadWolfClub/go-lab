@@ -5,9 +5,15 @@ import "strings"
 const sepString = ":"
 const STATIC = ""
 
+// CardStr represents a substring of CardMeta
 type CardStr string
+
+// SuitStr represents a substring of SuitMeta
 type SuitStr string
 
+// metadata
+// given a receiver of type SuitStr
+// find the SuitMeta for the SuitStr
 func (s SuitStr) metadata() (SuitMeta, bool) {
 	for _, d := range SuitMeta.all(STATIC) {
 		if strings.Contains(string(d), string(s)) {
@@ -17,6 +23,9 @@ func (s SuitStr) metadata() (SuitMeta, bool) {
 	return "", false
 }
 
+// metadata
+// given a receiver of type CardStr
+// find the CardMeta for the CardStr
 func (c CardStr) metadata() (CardMeta, bool) {
 	for _, d := range CardMeta.all(STATIC) {
 		if strings.Contains(string(d), string(c)) {
@@ -26,6 +35,9 @@ func (c CardStr) metadata() (CardMeta, bool) {
 	return "", false
 }
 
+// Valid
+// given a receiver of type SuitStr
+// find if it exists in all possible SuitMeta strings
 func (s SuitStr) Valid() bool {
 	for _, v := range SuitMeta.metaLake(STATIC) {
 		if v == s {
@@ -35,6 +47,9 @@ func (s SuitStr) Valid() bool {
 	return false
 }
 
+// Valid
+// given a receiver of type CardStr
+// find if it exists in all possible CardMeta strings
 func (c CardStr) Valid() bool {
 	for _, v := range CardMeta.metaLake(STATIC) {
 		if v == c {
@@ -78,14 +93,21 @@ const (
 	COLOR MetaID = 3
 )
 
+// all
+// get all possible metadata for SuitMeta
 func (SuitMeta) all() []SuitMeta {
 	return []SuitMeta{SPADES, HEARTS, CLUBS, DIAMONDS}
 }
 
+// all
+// get all possible metadata for CardMeta
 func (CardMeta) all() []CardMeta {
 	return []CardMeta{A, K, J, Q, C10, C9, C8, C7, C6, C5, C4, C3, C2}
 }
 
+// mapped
+// given a receiver of type SuitMeta
+// map the metadata-string to substrings SuitStr
 func (s SuitMeta) mapped() map[MetaID]SuitStr {
 	values := strings.Split(string(s), sepString)
 	m := map[MetaID]SuitStr{}
@@ -96,6 +118,9 @@ func (s SuitMeta) mapped() map[MetaID]SuitStr {
 	return m
 }
 
+// mapped
+// given a receiver of type CardMeta
+// map the metadata-string to substrings CardStr
 func (c CardMeta) mapped() map[MetaID]CardStr {
 	values := strings.Split(string(c), sepString)
 	m := map[MetaID]CardStr{}
@@ -105,6 +130,9 @@ func (c CardMeta) mapped() map[MetaID]CardStr {
 	return m
 }
 
+// mapped
+// explode all possible SuitStr in to an array
+// a data lake of all possible metadata substrings
 func (SuitMeta) metaLake() []SuitStr {
 	var strs []SuitStr
 	for _, v := range SuitMeta.all(STATIC) {
@@ -115,6 +143,9 @@ func (SuitMeta) metaLake() []SuitStr {
 	return strs
 }
 
+// mapped
+// explode all possible CardStr in to an array
+// a data lake of all possible metadata substrings
 func (CardMeta) metaLake() []CardStr {
 	var strs []CardStr
 	for _, v := range CardMeta.all(STATIC) {
@@ -123,22 +154,4 @@ func (CardMeta) metaLake() []CardStr {
 		}
 	}
 	return strs
-}
-
-func (SuitMeta) get(value SuitStr) (SuitMeta, bool) {
-	for _, v := range SuitMeta.all(STATIC) {
-		if strings.Contains(string(v), string(value)) {
-			return v, true
-		}
-	}
-	return "", false
-}
-
-func (CardMeta) get(value string) (CardMeta, bool) {
-	for _, v := range CardMeta.all(STATIC) {
-		if strings.Contains(string(v), value) {
-			return v, true
-		}
-	}
-	return "", false
 }
