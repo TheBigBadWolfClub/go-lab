@@ -64,7 +64,7 @@ func (d Deck) queryCard(card CardStr, suit SuitStr) (Card, error) {
 func (d Deck) shuffle() Deck {
 	source := rand.NewSource(time.Now().UnixNano())
 	r := rand.New(source)
-	for i, _ := range d.Cards {
+	for i := range d.Cards {
 		n := r.Intn(len(d.Cards) - 1)
 		d.Cards[i], d.Cards[n] = d.Cards[n], d.Cards[i]
 	}

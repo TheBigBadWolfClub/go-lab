@@ -1,5 +1,12 @@
 package deck
 
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"text/tabwriter"
+)
+
 type SuitID struct {
 	rank   SuitStr
 	Symbol SuitStr
@@ -19,10 +26,10 @@ func (s SuitMeta) suiteID() SuitID {
 	m := s.mapped()
 	return SuitID{
 		SuitMeta: s,
-		rank:     SuitStr(m[RANK]),
-		Symbol:   SuitStr(m[CODE]),
-		Label:    SuitStr(m[NAME]),
-		Color:    SuitStr(m[COLOR]),
+		rank:     m[RANK],
+		Symbol:   m[CODE],
+		Label:    m[NAME],
+		Color:    m[COLOR],
 	}
 }
 
@@ -30,9 +37,9 @@ func (c CardMeta) cardID() CardID {
 	m := c.mapped()
 	return CardID{
 		CardMeta: c,
-		Rank:     CardStr(m[RANK]),
-		Code:     CardStr(m[CODE]),
-		Name:     CardStr(m[NAME]),
+		Rank:     m[RANK],
+		Code:     m[CODE],
+		Name:     m[NAME],
 	}
 }
 
@@ -66,4 +73,45 @@ func (CardID) List() []CardID {
 
 func (c Card) Equal(o Card) bool {
 	return c == o
+}
+
+// Card implement fmters
+
+func (c Card) String() string {
+	return fmt.Sprintf("%s|%s", c.CardMeta, c.SuitMeta)
+}
+
+func (c Card) Format(s fmt.State, verb rune) {
+	switch verb {
+	case 'q':
+		_, _ = fmt.Fprintf(s, "%s%s", c.Code, c.Symbol)
+	case 'v':
+		if s.Flag('#') {
+			_, _ = fmt.Fprint(s, c.GoString())
+			return
+		}
+		_ = json.NewEncoder(s).Encode(c)
+	default:
+		_, _ = fmt.Fprint(s, c.String())
+	}
+}
+
+func (c Card) GoString() string {
+	gs := &bytes.Buffer{}
+	gs.WriteString("Card{\n")
+
+	writer := tabwriter.NewWriter(gs, 0, 0, 1, ' ', tabwriter.TabIndent)
+	_, _ = fmt.Fprintf(gs, "\tRank:\t\t%q\n", c.Rank)
+	_, _ = fmt.Fprintf(gs, "\tCode:\t\t%q\n", c.Code)
+	_, _ = fmt.Fprintf(gs, "\tName:\t\t%q\n", c.Name)
+	_, _ = fmt.Fprintf(gs, "\trank:\t\t%q\n", c.rank)
+	_, _ = fmt.Fprintf(gs, "\tSymbol:\t\t%q\n", c.Symbol)
+	_, _ = fmt.Fprintf(gs, "\tLabel:\t\t%q\n", c.Label)
+	_, _ = fmt.Fprintf(gs, "\tColor:\t\t%q\n", c.Color)
+	_, _ = fmt.Fprintf(gs, "\tCardMeta:\t%q\n", c.SuitMeta)
+	_, _ = fmt.Fprintf(gs, "\tSuitMeta:\t%q\n", c.SuitMeta)
+	_ = writer.Flush()
+
+	gs.WriteString("}")
+	return gs.String()
 }
