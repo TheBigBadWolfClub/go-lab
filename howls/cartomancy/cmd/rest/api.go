@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/TheBigBadWolfClub/go-lab/howls/cartomancy/internal/carddeck"
+	"github.com/TheBigBadWolfClub/go-lab/howls/cartomancy/internal/deck"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
@@ -21,8 +21,6 @@ func main() {
 }
 
 func api(r chi.Router) {
-	var deck carddeck.Deck
-	deck.Reset()
-	handler := carddeck.NewHandler(deck)
+	handler := deck.NewHandler(deck.NewDeck())
 	r.Route("/deck", handler.SubRoutes)
 }

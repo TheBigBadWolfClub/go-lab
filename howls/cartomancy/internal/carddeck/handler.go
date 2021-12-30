@@ -2,10 +2,11 @@ package carddeck
 
 import (
 	"encoding/json"
-	"github.com/TheBigBadWolfClub/go-lab/spells/foundation/pkg/rest"
-	"github.com/go-chi/chi/v5"
 	"net/http"
 	"strconv"
+
+	"github.com/TheBigBadWolfClub/go-lab/spells/foundation/pkg/rest"
+	"github.com/go-chi/chi/v5"
 )
 
 type handler struct {
