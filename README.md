@@ -10,7 +10,19 @@ GoLang Monorepo and Multi-module for project(s), lib(s) && playground.
 >The center of a wolf's universe is its pack, and howling is the glue that keeps the pack together.
 
 
-Some Go projects …..
+Some Golang projects, to train/test golang skills
+
+- [cartomancy](https://github.com/TheBigBadWolfClub/go-lab/tree/main/howls/cartomancy)
+: simple card deck API to play around with slices
+
+- [clean-arch](https://github.com/TheBigBadWolfClub/go-lab/tree/main/howls/clean-arch)
+: an implementation of Clean Architecture in Golang
+
+- [Gof4](https://github.com/TheBigBadWolfClub/go-lab/tree/main/howls/Gof4)
+: implementation of some Gang of four patterns in Golang
+
+- [net-scanner](https://github.com/TheBigBadWolfClub/go-lab/tree/main/howls/net-scanner)
+: play with net package (simple tcp port scanner)
 
 <hr>
 
@@ -23,6 +35,16 @@ Some Go projects …..
 
 Set of tools and private libs to group common functionality required on more than one project.
 
+- [config](https://github.com/TheBigBadWolfClub/go-lab/tree/main/spells/config)
+: a configuration file loader for golang apps
+
+- [foundation](https://github.com/TheBigBadWolfClub/go-lab/tree/main/spells/foundation)
+  : some common code, ... ?? keep or delete ??
+
+- [wolflog](https://github.com/TheBigBadWolfClub/go-lab/tree/main/spells/wolflog)
+  : a go/log wrapper, with extra functionality
+
+
 <hr>
 
 ### Riddles
@@ -34,6 +56,8 @@ Set of tools and private libs to group common functionality required on more tha
 
 Small unrelated pieces of GO code, to clarify, make proven of  or deepen the knowledge in GO
 
+- [recursion in go](https://github.com/TheBigBadWolfClub/go-lab/blob/main/riddles/recursion.go)
+- [sort algorithms](https://github.com/TheBigBadWolfClub/go-lab/blob/main/riddles/sort.go)
 <hr>
 
 ## Module management
