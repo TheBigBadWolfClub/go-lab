@@ -1,5 +1,5 @@
 // Package billing
-//Layer: Application Business
+// Layer: Application Business
 // Use cases orchestrate the flow of data to and from the entities,
 // and direct those entities to use their enterprise wide business rules
 // to achieve the goals of the use case.
@@ -13,7 +13,7 @@ import (
 	PowerTools "github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/powertools"
 )
 
-//Service interface
+// Service interface.
 type Service interface {
 	UnpaidList(id internal.ID) ([]*assignment.Assignment, error)
 	Pay(id internal.ID, code PowerTools.Code) error
@@ -80,5 +80,5 @@ func (s service) Total(id internal.ID) (float64, error) {
 }
 
 func calculatePrice(time float64, rate int, discount int) float64 {
-	return time * float64(rate) * float64(discount/100)
+	return time * float64(rate) * float64(discount/100) //nolint
 }

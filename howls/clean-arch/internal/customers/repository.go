@@ -65,7 +65,6 @@ func (r repo) Create(ent *Customer) (internal.ID, error) {
 			"name":     ent.Name,
 			"contract": ent.ContractType,
 		})
-
 	if err != nil {
 		return 0, err
 	}

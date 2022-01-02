@@ -1,8 +1,9 @@
 package internal
 
 import (
-	"github.com/go-chi/chi/v5"
 	"net/http"
+
+	"github.com/go-chi/chi"
 )
 
 type Endpoint interface {

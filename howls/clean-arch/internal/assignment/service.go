@@ -1,16 +1,17 @@
 // Package assignment
-//Layer: Application Business
+// Layer: Application Business
 // Use cases orchestrate the flow of data to and from the entities,
 // and direct those entities to use their enterprise wide business rules
 // to achieve the goals of the use case.
 package assignment
 
 import (
+	"time"
+
 	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal"
 	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/contracts"
 	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/customers"
 	PowerTools "github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/powertools"
-	"time"
 )
 
 type service struct {
@@ -38,7 +39,7 @@ func (s service) Assign(customerId internal.ID, code PowerTools.Code) error {
 		return internal.ErrNotFound
 	}
 
-	totalAssigned, err := s.repo.CustomerTotalAssigned(customerId)
+	totalAssigned, _ := s.repo.CustomerTotalAssigned(customerId)
 	if totalAssigned >= contract.MaxDevices {
 		return internal.ErrMaxAllowedReached
 	}
@@ -53,7 +54,6 @@ func (s service) Assign(customerId internal.ID, code PowerTools.Code) error {
 }
 
 func (s service) UnAssign(customerId internal.ID, code PowerTools.Code) error {
-
 	assign, err := s.repo.Read(customerId, code)
 	if err != nil {
 		return internal.ErrInconsistentState

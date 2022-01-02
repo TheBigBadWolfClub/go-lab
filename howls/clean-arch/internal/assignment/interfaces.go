@@ -12,7 +12,7 @@ import (
 	PowerTools "github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/powertools"
 )
 
-//Reader interface
+// Reader interface.
 type Reader interface {
 	IsToolAssigned(code PowerTools.Code) error
 	CustomerTotalAssigned(id internal.ID) (int, error)
@@ -20,19 +20,19 @@ type Reader interface {
 	Unpaid(id internal.ID) ([]*Assignment, error)
 }
 
-//Writer interface
+// Writer interface.
 type Writer interface {
 	Create(ent *Assignment) error
 	Update(ent *Assignment) error
 }
 
-//Repository interface
+// Repository interface.
 type Repository interface {
 	Reader
 	Writer
 }
 
-//Service interface
+// Service interface.
 type Service interface {
 	Assign(customerId internal.ID, code PowerTools.Code) error
 	UnAssign(customerId internal.ID, code PowerTools.Code) error

@@ -6,6 +6,7 @@
 package PowerTools
 
 type Code string
+
 type PowerTool struct {
 	Code Code
 	Type string

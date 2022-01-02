@@ -9,9 +9,10 @@ package contracts
 
 import (
 	"encoding/json"
-	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal"
-	"github.com/go-chi/chi/v5"
+	"github.com/TheBigBadWolfClub/go-lab/spells/foundation/pkg/rest"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type ContractDto struct {
@@ -23,7 +24,7 @@ type handler struct {
 	service Service
 }
 
-func NewHandler(srv Service) internal.Endpoint {
+func NewHandler(srv Service) rest.Endpoint {
 	return &handler{service: srv}
 }
 
@@ -76,7 +77,7 @@ func (h *handler) get(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(marshal)
 }
 
-// Presentation Rest Adapters
+// Presentation Rest Adapters.
 func toPresentation(entity *Contract) *ContractDto {
 	return &ContractDto{
 		ID:         string(entity.Type),

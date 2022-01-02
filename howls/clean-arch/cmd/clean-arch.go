@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/assignment"
 	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/billing"
 	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/contracts"
@@ -9,8 +12,6 @@ import (
 	PowerTools "github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/powertools"
 	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
-	"log"
-	"net/http"
 )
 
 const (
@@ -58,7 +59,6 @@ func main() {
 }
 
 func connectDB() *sqlx.DB {
-
 	conStr := fmt.Sprintf("%v:%v@(%v:%d)/%v", sqlUser, sqlPass, sqlHost, sqlPort, sqlDatabase)
 	db, err := sqlx.Connect("mysql", conStr)
 	if err != nil {

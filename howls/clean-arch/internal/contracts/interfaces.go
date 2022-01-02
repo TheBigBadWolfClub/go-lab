@@ -7,13 +7,13 @@
 // 4) Inner layers act on outer layers thought this interfaces abstractions
 package contracts
 
-//Repository interface
+// Repository interface.
 type Repository interface {
 	Read(id ContractType) (*Contract, error)
 	List() ([]*Contract, error)
 }
 
-//Service interface
+// Service interface.
 type Service interface {
 	Get(id ContractType) (*Contract, error)
 	List() ([]*Contract, error)

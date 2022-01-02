@@ -9,9 +9,11 @@ package PowerTools
 
 import (
 	"encoding/json"
+	"github.com/TheBigBadWolfClub/go-lab/spells/foundation/pkg/rest"
+	"net/http"
+
 	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal"
 	"github.com/go-chi/chi/v5"
-	"net/http"
 )
 
 type PowerToolDto struct {
@@ -24,7 +26,7 @@ type handler struct {
 	service Service
 }
 
-func NewHandler(srv Service) internal.Endpoint {
+func NewHandler(srv Service) rest.Endpoint {
 	return &handler{service: srv}
 }
 
@@ -85,7 +87,6 @@ func (h *handler) post(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(marshal)
-
 }
 
 func (h *handler) get(w http.ResponseWriter, r *http.Request) {

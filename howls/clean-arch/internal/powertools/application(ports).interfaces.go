@@ -9,20 +9,20 @@ package PowerTools
 
 // INPUT Ports
 
-//Reader interface
+// Reader interface.
 type Reader interface {
 	Read(code Code) (*PowerTool, error)
 	List() ([]*PowerTool, error)
 }
 
-//Writer interface
+// Writer interface.
 type Writer interface {
 	Create(ent *PowerTool) error
 	Update(ent *PowerTool) error
 	Delete(code Code) error
 }
 
-//Repository interface
+// Repository interface.
 type Repository interface {
 	Reader
 	Writer
@@ -30,7 +30,7 @@ type Repository interface {
 
 // OUTPUT Ports
 
-//Service UseCase interface
+// Service UseCase interface.
 type Service interface {
 	Get(code Code) (*PowerTool, error)
 	List() ([]*PowerTool, error)

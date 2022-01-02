@@ -6,9 +6,10 @@
 package assignment
 
 import (
+	"time"
+
 	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal"
 	PowerTools "github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/powertools"
-	"time"
 )
 
 type Assignment struct {
@@ -26,7 +27,7 @@ func NewAssignment(code PowerTools.Code, customer internal.ID) *Assignment {
 	}
 }
 
-// time.Now().Format("2006-01-02 15:04:05")
+// time.Now().Format("2006-01-02 15:04:05").
 func (a *Assignment) Start(time string) *Assignment {
 	a.start = time
 	return a
@@ -40,6 +41,7 @@ func (a *Assignment) End(time string) *Assignment {
 	a.end = time
 	return a
 }
+
 func (a *Assignment) EndLease() string {
 	return a.end
 }

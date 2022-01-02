@@ -12,8 +12,7 @@ import (
 	PowerTools "github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/powertools"
 )
 
-type repo struct {
-}
+type repo struct{}
 
 func NewRepository() *repo {
 	return &repo{}

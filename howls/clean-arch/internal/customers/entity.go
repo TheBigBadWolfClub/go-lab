@@ -10,7 +10,7 @@ import (
 	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/contracts"
 )
 
-// Customer entity used on the core layer and application layer
+// Customer entity used on the core layer and application layer.
 type Customer struct {
 	ID           internal.ID
 	Name         string

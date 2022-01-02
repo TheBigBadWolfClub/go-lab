@@ -2,13 +2,15 @@ package billing
 
 import (
 	"encoding/json"
+	"github.com/TheBigBadWolfClub/go-lab/spells/foundation/pkg/rest"
+	"net/http"
+
 	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal"
 	PowerTools "github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/powertools"
 	"github.com/go-chi/chi/v5"
-	"net/http"
 )
 
-func NewHandler(service Service) internal.Endpoint {
+func NewHandler(service Service) rest.Endpoint {
 	return &handler{srv: service}
 }
 
@@ -46,7 +48,6 @@ func (h handler) total(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id := internal.FromString(idStr)
 	total, err := h.srv.Total(id)
-
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		return

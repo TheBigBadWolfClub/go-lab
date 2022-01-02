@@ -9,10 +9,12 @@ package customers
 
 import (
 	"encoding/json"
+	"github.com/TheBigBadWolfClub/go-lab/spells/foundation/pkg/rest"
+	"net/http"
+
 	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal"
 	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/contracts"
 	"github.com/go-chi/chi/v5"
-	"net/http"
 )
 
 type CustomerDto struct {
@@ -25,7 +27,7 @@ type handler struct {
 	service Service
 }
 
-func NewHandler(srv Service) internal.Endpoint {
+func NewHandler(srv Service) rest.Endpoint {
 	return &handler{service: srv}
 }
 
@@ -86,7 +88,6 @@ func (h *handler) post(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(marshal)
-
 }
 
 func (h *handler) get(w http.ResponseWriter, r *http.Request) {
@@ -112,8 +113,7 @@ func (h *handler) get(w http.ResponseWriter, r *http.Request) {
 func (h *handler) delete(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id := internal.FromString(idStr)
-	err := h.service.Delete(id)
-	if err != nil {
+	if err := h.service.Delete(id); err != nil {
 		w.WriteHeader(http.StatusConflict)
 		return
 	}

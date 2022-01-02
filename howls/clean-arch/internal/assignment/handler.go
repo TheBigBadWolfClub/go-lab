@@ -9,10 +9,12 @@ package assignment
 
 import (
 	"encoding/json"
+	"github.com/TheBigBadWolfClub/go-lab/spells/foundation/pkg/rest"
+	"net/http"
+
 	"github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal"
 	PowerTools "github.com/TheBigBadWolfClub/go-lab/howls/clean-arch/internal/powertools"
 	"github.com/go-chi/chi/v5"
-	"net/http"
 )
 
 type AssignDto struct {
@@ -20,7 +22,7 @@ type AssignDto struct {
 	Id   int64  `json:"customer_id" validate:"required"`
 }
 
-func NewHandler(service Service) internal.Endpoint {
+func NewHandler(service Service) rest.Endpoint {
 	return &handler{srv: service}
 }
 

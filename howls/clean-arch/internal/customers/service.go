@@ -29,8 +29,7 @@ func (s service) List() ([]*Customer, error) {
 func (s service) Add(name string, contract string) (*Customer, error) {
 	contractType := contracts.ContractType(contract)
 	customer := NewCustomer(name, contractType)
-	err := customer.Validate()
-	if err != nil {
+	if err := customer.Validate(); err != nil {
 		return nil, err
 	}
 
@@ -43,8 +42,7 @@ func (s service) Add(name string, contract string) (*Customer, error) {
 }
 
 func (s service) Update(ent *Customer) error {
-	err := ent.Validate()
-	if err != nil {
+	if err := ent.Validate(); err != nil {
 		return err
 	}
 	return s.repo.Update(ent)
