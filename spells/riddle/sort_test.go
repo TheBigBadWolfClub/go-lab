@@ -5,58 +5,77 @@ import (
 	"testing"
 )
 
-func TestQuickSort(t *testing.T) {
-	type args struct {
-		arr  []int
-		low  int
-		high int
-	}
-	tests := []struct {
-		name string
-		args args
-		want []int
-	}{
+type tableTest struct {
+	name       string
+	initialArr []int
+	want       []int
+}
+
+func testTableSetup() []tableTest {
+	return []tableTest{
 		{
-			name: "order slice",
-			args: args{
-				arr:  []int{3, 2, 1},
-				low:  0,
-				high: 2,
-			},
-			want: []int{1, 2, 3},
+			name:       "first out of order",
+			initialArr: []int{5, 1, 2, 3, 4},
+			want:       []int{1, 2, 3, 4, 5},
+		}, {
+			name:       "last out of order",
+			initialArr: []int{2, 3, 4, 5, 1},
+			want:       []int{1, 2, 3, 4, 5},
+		}, {
+			name:       "sort full inverted",
+			initialArr: []int{4, 3, 2, 1},
+			want:       []int{1, 2, 3, 4},
+		}, {
+			name:       "sort half-end inverted",
+			initialArr: []int{4, 2, 3, 1},
+			want:       []int{1, 2, 3, 4},
+		}, {
+			name:       "sort half-middle inverted",
+			initialArr: []int{1, 3, 2, 4},
+			want:       []int{1, 2, 3, 4},
 		},
 	}
-	for _, tt := range tests {
+}
+
+func TestBubbleSort(t *testing.T) {
+
+	for _, tt := range testTableSetup() {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := QuickSort(tt.args.arr, tt.args.low, tt.args.high); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("QuickSort() = %v, want %v", got, tt.want)
+			if got := BubbleSort(tt.initialArr); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("BubbleSort() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_partition(t *testing.T) {
-	type args struct {
-		arr  []int
-		low  int
-		high int
-	}
-	tests := []struct {
-		name  string
-		args  args
-		want  []int
-		want1 int
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
+func TestSelectionSort(t *testing.T) {
+
+	for _, tt := range testTableSetup() {
 		t.Run(tt.name, func(t *testing.T) {
-			got, got1 := partition(tt.args.arr, tt.args.low, tt.args.high)
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("partition() got = %v, want %v", got, tt.want)
+			if got := SelectionSort(tt.initialArr); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SelectionSort() = %v, want %v", got, tt.want)
 			}
-			if got1 != tt.want1 {
-				t.Errorf("partition() got1 = %v, want %v", got1, tt.want1)
+		})
+	}
+}
+
+func TestInsertionSort(t *testing.T) {
+
+	for _, tt := range testTableSetup() {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := InsertionSort(tt.initialArr); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("InsertionSort() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestMergeSort(t *testing.T) {
+
+	for _, tt := range testTableSetup() {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := MergeSort(tt.initialArr); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MergeSort() = %v, want %v", got, tt.want)
 			}
 		})
 	}
