@@ -1,12 +1,11 @@
-package deck
+package carddeck
 
 import (
 	"encoding/json"
-	"net/http"
-	"strconv"
-
 	"github.com/TheBigBadWolfClub/go-lab/spells/foundation/pkg/rest"
 	"github.com/go-chi/chi/v5"
+	"net/http"
+	"strconv"
 )
 
 type handler struct {
@@ -46,7 +45,7 @@ func (h *handler) full(w http.ResponseWriter, _ *http.Request) {
 
 func (h *handler) suite(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	suite, err := h.deck.bySuit(id)
+	suite, err := h.deck.QuerySuite(SuitStr(id))
 	if err != nil {
 		er := http.StatusNotFound
 		http.Error(w, http.StatusText(er), er)
@@ -87,7 +86,7 @@ func (h *handler) queryCard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	queryCard, err := h.deck.queryCard(CardStr(card), SuitStr(suit))
+	queryCard, err := Deck{}.QueryCard(CardStr(card), SuitStr(suit))
 	if err != nil {
 		er := http.StatusNotFound
 		http.Error(w, http.StatusText(er), er)
@@ -106,8 +105,8 @@ func (h *handler) queryCard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) shuffle(w http.ResponseWriter, _ *http.Request) {
-	shuffle := h.deck.shuffle()
-	marshal, err := json.Marshal(shuffle)
+	h.deck.Shuffle()
+	marshal, err := json.Marshal(h.deck)
 	if err != nil {
 		er := http.StatusInternalServerError
 		http.Error(w, http.StatusText(er), er)
@@ -129,7 +128,7 @@ func (h *handler) deal(w http.ResponseWriter, r *http.Request) {
 
 	nCardsStr := r.URL.Query().Get("cards")
 	if nCardsStr == "" {
-		nCardsStr = string(rune(len(h.deck.Cards) / nPlayers))
+		nCardsStr = string(rune(len(h.deck) / nPlayers))
 	}
 
 	nCards, err := strconv.Atoi(nPlayersStr)
@@ -139,7 +138,7 @@ func (h *handler) deal(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	deals := h.deck.deal(nPlayers, nCards)
+	deals := h.deck.ByPlayers(nPlayers, nCards)
 	marshal, err := json.Marshal(deals)
 	if err != nil {
 		er := http.StatusInternalServerError

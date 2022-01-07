@@ -1,4 +1,4 @@
-package deck
+package carddeck
 
 import (
 	"bytes"
@@ -48,6 +48,16 @@ type Card struct {
 	SuitID
 }
 
+func (Card) NumOfSuits() int {
+	return len(SuitMeta.all(STATIC))
+}
+func (Card) NumOfCardType() int {
+	return len(CardMeta.all(STATIC))
+}
+func (Card) NumOfCards() int {
+	return Card{}.NumOfCardType() * Card{}.NumOfSuits()
+}
+
 func NewCard(c CardID, s SuitID) Card {
 	return Card{
 		CardID: c,
@@ -69,6 +79,10 @@ func (CardID) List() []CardID {
 		list = append(list, c.cardID())
 	}
 	return list
+}
+
+func (c Card) Is(card CardMeta, suit SuitMeta) bool {
+	return c.CardMeta == card && c.SuitMeta == suit
 }
 
 func (c Card) Equal(o Card) bool {
