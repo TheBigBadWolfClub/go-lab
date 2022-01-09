@@ -123,10 +123,9 @@ func (d *Deck) ByPlayers(nPlayers, nCards int) Deal {
 	}
 	for i := 0; i < nPlayers; i++ {
 		deals.Players[i] = (*d)[:nCards]
+		*d = (*d)[nCards:]
 	}
-	deals.Dead = (*d)[nPlayers*nCards:]
-
-	d.Empty()
+	deals.Dead = (*d)[:len(*d)]
 	return deals
 }
 

@@ -22,6 +22,22 @@ type CardID struct {
 	CardMeta
 }
 
+func (SuitID) List() []SuitID {
+	var list []SuitID
+	for _, s := range SuitMeta.all(STATIC) {
+		list = append(list, s.suiteID())
+	}
+	return list
+}
+
+func (CardID) List() []CardID {
+	var list []CardID
+	for _, c := range CardMeta.all(STATIC) {
+		list = append(list, c.cardID())
+	}
+	return list
+}
+
 func (s SuitMeta) suiteID() SuitID {
 	m := s.mapped()
 	return SuitID{
@@ -48,6 +64,13 @@ type Card struct {
 	SuitID
 }
 
+func NewCard(c CardID, s SuitID) Card {
+	return Card{
+		CardID: c,
+		SuitID: s,
+	}
+}
+
 func (Card) NumOfSuits() int {
 	return len(SuitMeta.all(STATIC))
 }
@@ -56,29 +79,6 @@ func (Card) NumOfCardType() int {
 }
 func (Card) NumOfCards() int {
 	return Card{}.NumOfCardType() * Card{}.NumOfSuits()
-}
-
-func NewCard(c CardID, s SuitID) Card {
-	return Card{
-		CardID: c,
-		SuitID: s,
-	}
-}
-
-func (SuitID) List() []SuitID {
-	var list []SuitID
-	for _, s := range SuitMeta.all(STATIC) {
-		list = append(list, s.suiteID())
-	}
-	return list
-}
-
-func (CardID) List() []CardID {
-	var list []CardID
-	for _, c := range CardMeta.all(STATIC) {
-		list = append(list, c.cardID())
-	}
-	return list
 }
 
 func (c Card) Is(card CardMeta, suit SuitMeta) bool {
@@ -90,7 +90,6 @@ func (c Card) Equal(o Card) bool {
 }
 
 // Card implement fmters
-
 func (c Card) String() string {
 	return fmt.Sprintf("%s|%s", c.CardMeta, c.SuitMeta)
 }
@@ -128,4 +127,15 @@ func (c Card) GoString() string {
 
 	gs.WriteString("}")
 	return gs.String()
+}
+
+func (c Card) CompareTo(c2 Card) int {
+
+	if c.rank < c2.rank {
+		return 1
+	}
+	if c.rank > c2.rank {
+		return -1
+	}
+	return 0
 }

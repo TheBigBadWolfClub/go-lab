@@ -16,3 +16,12 @@ func TestCard_GoString(t *testing.T) {
 	fmt.Printf("%#v\n", card)
 	fmt.Printf("%v\n", card)
 }
+
+func TestDeck_GoString(t *testing.T) {
+	var deck Deck
+	deck.Reset()
+	fmt.Printf("%s\n", deck)
+	fmt.Printf("%q\n", deck)
+	fmt.Printf("%#v\n", deck)
+	fmt.Printf("%v\n", deck)
+}
