@@ -7,20 +7,6 @@ import (
 	"time"
 )
 
-// Dealer
-//responsibility it is to deal the cards
-type Dealer interface {
-	Shuffle()
-	BySuit() Deal
-	ByPlayers(nPlayers, nCards int) Deal
-}
-
-type Deal struct {
-	Dead    Deck
-	Table   Deck
-	Players []Deck
-}
-
 type Deck []Card
 
 // Reset
@@ -36,6 +22,10 @@ func (d *Deck) Reset() {
 
 func (d *Deck) Empty() {
 	*d = make([]Card, 0, 52)
+}
+
+func (d Deck) IsEmpty() bool {
+	return len(d) == 0
 }
 
 func (d Deck) Shuffle() {
@@ -102,31 +92,16 @@ func (d Deck) Has(card CardMeta, suit SuitMeta) bool {
 
 // BySuit
 // deal cards by Suit
-func (d *Deck) BySuit() Deal {
-	deal := Deal{Players: make([]Deck, Card{}.NumOfSuits())}
+func (d *Deck) BySuit() []Deck {
+	decks := make([]Deck, Card{}.NumOfSuits())
 	for _, c := range *d {
 		rank, _ := strconv.Atoi(string(c.suiteID().rank))
 		id := rank - 1
-		deal.Players[id] = append(deal.Players[id], c)
+		decks[id] = append(decks[id], c)
 	}
 
 	d.Empty()
-	return deal
-}
-
-//ByPlayers
-// deal nCards per nPlayers
-func (d *Deck) ByPlayers(nPlayers, nCards int) Deal {
-	deals := Deal{
-		Dead:    Deck{},
-		Players: make([]Deck, nPlayers),
-	}
-	for i := 0; i < nPlayers; i++ {
-		deals.Players[i] = (*d)[:nCards]
-		*d = (*d)[nCards:]
-	}
-	deals.Dead = (*d)[:len(*d)]
-	return deals
+	return decks
 }
 
 // QuerySuite

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"text/tabwriter"
 )
 
@@ -131,10 +132,13 @@ func (c Card) GoString() string {
 
 func (c Card) CompareTo(c2 Card) int {
 
-	if c.rank < c2.rank {
+	r1, _ := strconv.Atoi(string(c.Rank))
+	r2, _ := strconv.Atoi(string(c2.Rank))
+
+	if r1 < r2 {
 		return 1
 	}
-	if c.rank > c2.rank {
+	if r1 > r2 {
 		return -1
 	}
 	return 0

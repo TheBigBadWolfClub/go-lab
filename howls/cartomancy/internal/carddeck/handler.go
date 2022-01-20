@@ -12,8 +12,8 @@ type handler struct {
 	deck Deck
 }
 
-func NewHandler(deck Deck) rest.Endpoint {
-	return &handler{deck: deck}
+func NewHandler() rest.Endpoint {
+	return &handler{deck: Deck{}}
 }
 
 func (h *handler) SubRoutes(r chi.Router) {
@@ -121,24 +121,19 @@ func (h *handler) deal(w http.ResponseWriter, r *http.Request) {
 	nPlayersStr := r.URL.Query().Get("players")
 	nPlayers, err := strconv.Atoi(nPlayersStr)
 	if err != nil {
-		er := http.StatusConflict
-		http.Error(w, "invalid query param: players (n of players)", er)
+		http.Error(w, "invalid query param: players (n of players)", http.StatusConflict)
 		return
 	}
 
 	nCardsStr := r.URL.Query().Get("cards")
-	if nCardsStr == "" {
-		nCardsStr = string(rune(len(h.deck) / nPlayers))
-	}
-
-	nCards, err := strconv.Atoi(nPlayersStr)
+	nCards, err := strconv.Atoi(nCardsStr)
 	if err != nil {
-		er := http.StatusConflict
-		http.Error(w, "invalid query param: cards (n of cards per player)", er)
+		http.Error(w, "invalid query param: cards (n of cards per player)", http.StatusConflict)
 		return
 	}
 
-	deals := h.deck.ByPlayers(nPlayers, nCards)
+	newDeal := NewDeal(Rules{NumDecks: nPlayers, NumCards: nCards})
+	deals := newDeal.ByPlayer()
 	marshal, err := json.Marshal(deals)
 	if err != nil {
 		er := http.StatusInternalServerError
