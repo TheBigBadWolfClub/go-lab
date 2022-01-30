@@ -1,11 +1,14 @@
 package riddles
 
+import (
+	"constraints"
+)
+
 //QuickSort
 // Space complexity: O(1)
 // best case: O(n logn)
 // average case: O(n logn)
 // worst case: O(n^2)
-// memory: O(logn)
 // stable: no
 // Method: partition
 func QuickSort(arr []int, low, high int) []int {
@@ -42,10 +45,9 @@ func quickSortPartition(arr []int, low, high int) ([]int, int) {
 // best case: O(n)
 // average case: O(n^2)
 // worst case: O(n^2)
-// memory: O(1)
 // stable: yes
 // Method: exchanging
-func BubbleSort(arr []int) []int {
+func BubbleSort[T constraints.Ordered](arr []T) []T {
 	var swapped bool
 	for i := 0; i < len(arr)-1; i++ {
 		if arr[i] > arr[i+1] {
@@ -66,10 +68,9 @@ func BubbleSort(arr []int) []int {
 // best case: O(n^2)
 // average case: O(n^2)
 // worst case: O(n^2)
-// memory: O(1)
 // stable: no
 // Method: selection
-func SelectionSort(arr []int) []int {
+func SelectionSort[T constraints.Ordered](arr []T) []T {
 
 	if len(arr) <= 1 {
 		return arr
@@ -84,18 +85,17 @@ func SelectionSort(arr []int) []int {
 
 	value := arr[pos]
 	nextSort := SelectionSort(append(arr[:pos], arr[pos+1:]...))
-	return append([]int{value}, nextSort...)
+	return append([]T{value}, nextSort...)
 }
 
 //InsertionSort
 // Space complexity: O(1)
-// memory: O(1)
 // best case: O(n)
 // average case: O(n^2)
 // worst case: O(n^2)
 // stable: yes
 // Method: insertion
-func InsertionSort(arr []int) []int {
+func InsertionSort[T constraints.Ordered](arr []T) []T {
 
 	if len(arr) <= 1 {
 		return arr
@@ -112,13 +112,12 @@ func InsertionSort(arr []int) []int {
 
 //MergeSort
 // Space complexity: O(n)
-// memory: O(n)
 // best case: O(nlogn)
 // average case: O(nlogn)
 // worst case: O(nlogn)
 // stable: yes
 // Method: merging
-func MergeSort(items []int) []int {
+func MergeSort[T constraints.Ordered](items []T) []T {
 	if len(items) < 2 {
 		return items
 	}
@@ -126,8 +125,8 @@ func MergeSort(items []int) []int {
 	second := MergeSort(items[len(items)/2:])
 	return mergeSortMerge(first, second)
 }
-func mergeSortMerge(a []int, b []int) []int {
-	final := []int{}
+func mergeSortMerge[T constraints.Ordered](a, b []T) []T {
+	final := []T{}
 	i := 0
 	j := 0
 	for i < len(a) && j < len(b) {

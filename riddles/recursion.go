@@ -1,6 +1,8 @@
 package riddles
 
-func Factorial(i uint) uint {
+import "constraints"
+
+func Factorial[T constraints.Unsigned](i T) T {
 	if i <= 1 {
 		return 1
 	}
@@ -8,7 +10,7 @@ func Factorial(i uint) uint {
 	return i * Factorial(i-1)
 }
 
-func Sum(n uint) uint {
+func Sum[T constraints.Unsigned](n T) T {
 	if n == 0 {
 		return n
 	}
@@ -16,7 +18,7 @@ func Sum(n uint) uint {
 	return n + Sum(n-1)
 }
 
-func FibonacciNumber(n uint) uint {
+func FibonacciNumber[T constraints.Unsigned](n T) T {
 	if n < 2 {
 		return n
 	}
@@ -24,15 +26,15 @@ func FibonacciNumber(n uint) uint {
 	return FibonacciNumber(n-1) + FibonacciNumber(n-2)
 }
 
-func FibonacciSequence(n uint) []uint {
+func FibonacciSequence[T constraints.Unsigned](n T) []T {
 	if n <= 1 {
-		return []uint{0, 1}
+		return []T{0, 1}
 	}
 
 	return append(FibonacciSequence(n-1), FibonacciNumber(n-2)+FibonacciNumber(n-1))
 }
 
-func GreatestCommonDivisor(x, y uint) uint {
+func GreatestCommonDivisor[T constraints.Unsigned](x, y T) T {
 	if y == 0 {
 		return x
 	}
