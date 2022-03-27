@@ -1,8 +1,6 @@
-package riddles
+package pkg
 
-import (
-	"constraints"
-)
+import "golang.org/x/exp/constraints"
 
 //QuickSort
 // Space complexity: O(1)

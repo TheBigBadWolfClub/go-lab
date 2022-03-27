@@ -1,4 +1,4 @@
-package riddles
+package pkg
 
 import (
 	"reflect"
