@@ -9,12 +9,12 @@ func TestLinkedList_size(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name string
-		list LinkedList[rune]
+		list DoubleLinkedList[rune]
 		want int
 	}{
 		{
 			name: "empty list",
-			list: LinkedList[rune]{},
+			list: DoubleLinkedList[rune]{},
 			want: 0,
 		},
 		{
@@ -43,13 +43,13 @@ func TestLinkedList_AddHead(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name     string
-		list     LinkedList[rune]
-		expected LinkedList[rune]
+		list     DoubleLinkedList[rune]
+		expected DoubleLinkedList[rune]
 		value    rune
 	}{
 		{
 			name:     "empty list",
-			list:     LinkedList[rune]{},
+			list:     DoubleLinkedList[rune]{},
 			expected: linkedListGenerator(1, 0),
 			value:    rune(0),
 		}, {
@@ -65,7 +65,7 @@ func TestLinkedList_AddHead(t *testing.T) {
 			t.Parallel()
 			tt.list.AddHead(tt.value)
 
-			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(LinkedList[rune]{}, Node[rune]{}))
+			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(DoubleLinkedList[rune]{}, DoubleLinkedNode[rune]{}))
 			if diff != "" {
 				t.Errorf("fail to add to list: %s", diff)
 			}
@@ -77,13 +77,13 @@ func TestLinkedList_AddTail(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name     string
-		list     LinkedList[rune]
-		expected LinkedList[rune]
+		list     DoubleLinkedList[rune]
+		expected DoubleLinkedList[rune]
 		value    rune
 	}{
 		{
 			name:     "empty list",
-			list:     LinkedList[rune]{},
+			list:     DoubleLinkedList[rune]{},
 			expected: linkedListGenerator(1, 0),
 			value:    rune(0),
 		}, {
@@ -99,7 +99,7 @@ func TestLinkedList_AddTail(t *testing.T) {
 			t.Parallel()
 
 			tt.list.AddTail(tt.value)
-			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(LinkedList[rune]{}, Node[rune]{}))
+			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(DoubleLinkedList[rune]{}, DoubleLinkedNode[rune]{}))
 			if diff != "" {
 				t.Errorf("fail to add to list: %s", diff)
 			}
@@ -113,15 +113,15 @@ func TestLinkedList_Add(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name     string
-		list     LinkedList[rune]
-		expected LinkedList[rune]
+		list     DoubleLinkedList[rune]
+		expected DoubleLinkedList[rune]
 		value    rune
 		wantErr  bool
 	}{
 		{
 			name:     "empty list",
-			list:     LinkedList[rune]{},
-			expected: LinkedList[rune]{},
+			list:     DoubleLinkedList[rune]{},
+			expected: DoubleLinkedList[rune]{},
 			value:    1,
 			wantErr:  true,
 		}, {
@@ -148,7 +148,7 @@ func TestLinkedList_Add(t *testing.T) {
 				t.Errorf("Add() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(LinkedList[rune]{}, Node[rune]{}))
+			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(DoubleLinkedList[rune]{}, DoubleLinkedNode[rune]{}))
 			if diff != "" && !tt.wantErr {
 				t.Errorf("fail to add to list: %s", diff)
 			}
@@ -161,15 +161,15 @@ func TestLinkedList_Delete(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name     string
-		list     LinkedList[rune]
-		expected LinkedList[rune]
+		list     DoubleLinkedList[rune]
+		expected DoubleLinkedList[rune]
 		index    int
 		wantErr  bool
 	}{
 		{
 			name:     "empty list",
-			list:     LinkedList[rune]{},
-			expected: LinkedList[rune]{},
+			list:     DoubleLinkedList[rune]{},
+			expected: DoubleLinkedList[rune]{},
 			index:    0,
 			wantErr:  true,
 		}, {
@@ -181,7 +181,7 @@ func TestLinkedList_Delete(t *testing.T) {
 		}, {
 			name:     "one elem list",
 			list:     linkedListGenerator(1, 0),
-			expected: LinkedList[rune]{},
+			expected: DoubleLinkedList[rune]{},
 			index:    0,
 			wantErr:  false,
 		}, {
@@ -214,7 +214,7 @@ func TestLinkedList_Delete(t *testing.T) {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(LinkedList[rune]{}, Node[rune]{}))
+			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(DoubleLinkedList[rune]{}, DoubleLinkedNode[rune]{}))
 			if diff != "" && !tt.wantErr {
 				t.Errorf("fail to delete at index=%d list: %s", tt.index, diff)
 			}
@@ -227,19 +227,19 @@ func TestLinkedList_DeleteHead(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name     string
-		list     LinkedList[rune]
-		expected LinkedList[rune]
+		list     DoubleLinkedList[rune]
+		expected DoubleLinkedList[rune]
 		wantErr  bool
 	}{
 		{
 			name:     "empty list",
-			list:     LinkedList[rune]{},
-			expected: LinkedList[rune]{},
+			list:     DoubleLinkedList[rune]{},
+			expected: DoubleLinkedList[rune]{},
 			wantErr:  true,
 		}, {
 			name:     "one elem list",
 			list:     linkedListGenerator(1, 0),
-			expected: LinkedList[rune]{},
+			expected: DoubleLinkedList[rune]{},
 			wantErr:  false,
 		}, {
 			name:     "two elem list",
@@ -258,7 +258,7 @@ func TestLinkedList_DeleteHead(t *testing.T) {
 				t.Errorf("DeleteHead() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(LinkedList[rune]{}, Node[rune]{}))
+			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(DoubleLinkedList[rune]{}, DoubleLinkedNode[rune]{}))
 			if diff != "" && !tt.wantErr {
 				t.Errorf("fail to delete tail list: %s", diff)
 			}
@@ -271,19 +271,19 @@ func TestLinkedList_DeleteTail(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name     string
-		list     LinkedList[rune]
-		expected LinkedList[rune]
+		list     DoubleLinkedList[rune]
+		expected DoubleLinkedList[rune]
 		wantErr  bool
 	}{
 		{
 			name:     "empty list",
-			list:     LinkedList[rune]{},
-			expected: LinkedList[rune]{},
+			list:     DoubleLinkedList[rune]{},
+			expected: DoubleLinkedList[rune]{},
 			wantErr:  true,
 		}, {
 			name:     "one elem list",
 			list:     linkedListGenerator(1, 0),
-			expected: LinkedList[rune]{},
+			expected: DoubleLinkedList[rune]{},
 			wantErr:  false,
 		}, {
 			name:     "two elem list",
@@ -302,7 +302,7 @@ func TestLinkedList_DeleteTail(t *testing.T) {
 				t.Errorf("DeleteTail() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(LinkedList[rune]{}, Node[rune]{}))
+			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(DoubleLinkedList[rune]{}, DoubleLinkedNode[rune]{}))
 			if diff != "" && !tt.wantErr {
 				t.Errorf("fail to delete tail list: %s", diff)
 			}
@@ -311,7 +311,7 @@ func TestLinkedList_DeleteTail(t *testing.T) {
 	}
 }
 
-func linkedListGenerator(size, start int, skip ...rune) LinkedList[rune] {
+func linkedListGenerator(size, start int, skip ...rune) DoubleLinkedList[rune] {
 
 	skipIt := func(index rune) bool {
 		for _, sk := range skip {
@@ -335,7 +335,7 @@ func linkedListGenerator(size, start int, skip ...rune) LinkedList[rune] {
 		return vs
 	}
 
-	nodes := make([]Node[rune], size)
+	nodes := make([]DoubleLinkedNode[rune], size)
 	ints := values()
 	for ix, vs := range ints {
 		nodes[ix].valid = true
@@ -349,7 +349,7 @@ func linkedListGenerator(size, start int, skip ...rune) LinkedList[rune] {
 		}
 	}
 
-	return LinkedList[rune]{
+	return DoubleLinkedList[rune]{
 		head:  &nodes[0],
 		tail:  &nodes[size-1],
 		count: size,

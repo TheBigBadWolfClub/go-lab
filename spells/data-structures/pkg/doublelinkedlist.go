@@ -1,25 +1,25 @@
 package pkg
 
-type Node[T any] struct {
-	next  *Node[T]
-	prev  *Node[T]
+type DoubleLinkedNode[T any] struct {
+	next  *DoubleLinkedNode[T]
+	prev  *DoubleLinkedNode[T]
 	valid bool
 	value T
 }
 
-type LinkedList[T any] struct {
-	head  *Node[T]
-	tail  *Node[T]
+type DoubleLinkedList[T any] struct {
+	head  *DoubleLinkedNode[T]
+	tail  *DoubleLinkedNode[T]
 	count int
 }
 
-func (l *LinkedList[T]) Size() int {
+func (l *DoubleLinkedList[T]) Size() int {
 	return l.count
 }
 
-func (l *LinkedList[T]) AddHead(v T) {
+func (l *DoubleLinkedList[T]) AddHead(v T) {
 
-	node := Node[T]{
+	node := DoubleLinkedNode[T]{
 		next:  l.head,
 		prev:  nil,
 		valid: true,
@@ -38,8 +38,8 @@ func (l *LinkedList[T]) AddHead(v T) {
 	l.count++
 }
 
-func (l *LinkedList[T]) AddTail(v T) {
-	node := Node[T]{
+func (l *DoubleLinkedList[T]) AddTail(v T) {
+	node := DoubleLinkedNode[T]{
 		next:  nil,
 		prev:  l.tail,
 		valid: true,
@@ -58,13 +58,13 @@ func (l *LinkedList[T]) AddTail(v T) {
 	l.count++
 }
 
-func (l *LinkedList[T]) Add(v T, i int) error {
+func (l *DoubleLinkedList[T]) Add(v T, i int) error {
 	node, err := l.linearSearch(i)
 	if err != nil {
 		return err
 	}
 
-	newNode := &Node[T]{
+	newNode := &DoubleLinkedNode[T]{
 		next:  node,
 		prev:  node.prev,
 		valid: true,
@@ -77,7 +77,7 @@ func (l *LinkedList[T]) Add(v T, i int) error {
 	return nil
 }
 
-func (l *LinkedList[T]) Delete(index int) error {
+func (l *DoubleLinkedList[T]) Delete(index int) error {
 	if index == 0 {
 		return l.DeleteHead()
 	}
@@ -99,7 +99,7 @@ func (l *LinkedList[T]) Delete(index int) error {
 	return nil
 }
 
-func (l *LinkedList[T]) DeleteHead() error {
+func (l *DoubleLinkedList[T]) DeleteHead() error {
 	if l.Size() == 0 {
 		return IndexOutOfBounds
 	}
@@ -119,7 +119,7 @@ func (l *LinkedList[T]) DeleteHead() error {
 	return nil
 }
 
-func (l *LinkedList[T]) DeleteTail() error {
+func (l *DoubleLinkedList[T]) DeleteTail() error {
 	if l.Size() == 0 {
 		return IndexOutOfBounds
 	}
@@ -139,7 +139,7 @@ func (l *LinkedList[T]) DeleteTail() error {
 	return nil
 }
 
-func (l *LinkedList[T]) linearSearch(index int) (*Node[T], error) {
+func (l *DoubleLinkedList[T]) linearSearch(index int) (*DoubleLinkedNode[T], error) {
 	cur := l.head
 	for i := 0; i < l.Size(); i++ {
 		if i == index {
@@ -151,6 +151,6 @@ func (l *LinkedList[T]) linearSearch(index int) (*Node[T], error) {
 	return nil, IndexOutOfBounds
 }
 
-func (l *LinkedList[T]) tailIndex() int {
+func (l *DoubleLinkedList[T]) tailIndex() int {
 	return l.Size() - 1
 }
