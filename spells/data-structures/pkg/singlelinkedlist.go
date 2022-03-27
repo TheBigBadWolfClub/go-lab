@@ -1,119 +1,139 @@
 package pkg
 
-type SingleLinkList[T any] struct {
-	next  *SingleLinkList[T]
-	valid bool
+type LinkedList[T any] struct {
+	Len  int
+	Head *LinkedListNode[T]
+}
+
+type LinkedListNode[T any] struct {
+	next  *LinkedListNode[T]
 	value T
 }
 
-func (l *SingleLinkList[T]) Add(v T) {
-	if !l.valid {
-		l.next = nil
-		l.valid = true
-		l.value = v
-		return
-	}
-
-	tail := l.tail()
-	tail.next = &SingleLinkList[T]{
+func NewSingleListNode[T any](v T) *LinkedListNode[T] {
+	return &LinkedListNode[T]{
 		next:  nil,
-		valid: true,
 		value: v,
 	}
 }
 
-func (l *SingleLinkList[T]) Get(index int) (T, bool) {
+func (l *LinkedList[T]) Add(v T) {
+	newNode := NewSingleListNode(v)
+	if l.Head == nil {
+		l.Head = newNode
+		l.Len++
+		return
+	}
+
+	tail := l.tail()
+	tail.next = newNode
+	l.Len++
+}
+
+func (l *LinkedList[T]) AddNode(v *LinkedListNode[T]) {
+
+	if l.Head == nil {
+		l.Head = v
+		l.Len++
+		return
+	}
+
+	tail := l.tail().next
+	tail.next = v
+}
+
+func (l *LinkedList[T]) Get(index int) (T, bool) {
 	var zero T
-	if !l.valid {
+	if l.Head == nil || l.Len <= index {
 		return zero, false
 	}
 
-	cur := l
-	for i := 0; ; i++ {
-		if i == index {
-			return cur.value, cur.valid
-		}
-
+	cur := l.Head
+	for i := 1; i <= index; i++ {
 		cur = cur.next
-		if cur == nil {
-			return zero, false
-		}
 	}
+
+	return cur.value, true
 }
 
-func (l *SingleLinkList[T]) Delete(index int) error {
-	if !l.valid {
+func (l *LinkedList[T]) Delete(index int) error {
+	if l.Head == nil || l.Len <= index {
 		return IndexNotFound
 	}
 
-	if l.deleteHead(index) {
+	if index == 0 {
+		l.Head = l.Head.next
+		l.Len--
 		return nil
 	}
 
-	cur := l
-	for i := 0; ; i++ {
-		if cur == nil || !cur.valid {
-			return IndexNotFound
-		}
-
-		// is next to be deleted
-		if i+1 == index && cur.next.valid {
-			cur.next = cur.next.next
-			return nil
-		}
-
-		cur = cur.next
-	}
-}
-
-func (l *SingleLinkList[T]) IsEmpty() bool {
-	return !l.valid
-}
-
-func (l *SingleLinkList[T]) Size() int {
-
-	var count int
-	cur := l
-	for {
-		if cur == nil || !cur.valid {
-			break
-		}
-		count++
+	cur := l.Head
+	for i := 1; i < index; i++ {
 		cur = cur.next
 	}
 
-	return count
-}
-
-func (l *SingleLinkList[T]) tail() *SingleLinkList[T] {
-	if !l.valid {
+	if cur.next == nil {
 		return nil
 	}
 
-	cur := l
-	for {
-		if cur.next == nil {
-			return cur
-		}
-		cur = cur.next
-	}
+	cur.next = cur.next.next
+	l.Len--
+	return nil
 }
 
-func (l *SingleLinkList[T]) deleteHead(index int) (ok bool) {
-	if index != 0 {
-		return false
+func (l *LinkedList[T]) IsEmpty() bool {
+	return l.Len == 0
+}
+
+func (l *LinkedList[T]) Size() int {
+	return l.Len
+}
+
+func (l *LinkedList[T]) tail() *LinkedListNode[T] {
+	if l.Head == nil || l.Len == 0 {
+		return nil
 	}
 
-	if l.next != nil {
-		l.valid = l.next.valid
-		l.value = l.next.value
-		l.next = l.next.next // need to be last
+	cur := l.Head
+	for i := 1; i < l.Len; i++ {
+		cur = cur.next
+	}
+	return cur
+}
+
+func (l *LinkedList[T]) deleteHead() (ok bool) {
+	if l.Head == nil {
 		return true
-
 	}
 
-	var zero T
-	l.value = zero
-	l.valid = false
+	l.Head = l.Head.next
+	l.Len--
 	return true
+}
+
+func (l *LinkedList[T]) delete(index int) (ok bool) {
+	cur := l.Head
+	for i := 0; i < index; i++ {
+		cur = cur.next
+	}
+
+	if cur.next == nil {
+		return true
+	}
+	cur.next = cur.next.next
+	return true
+}
+
+func (l *LinkedList[T]) Reverse() {
+	curr := l.Head
+	var prev *LinkedListNode[T]
+	var next *LinkedListNode[T]
+
+	for curr != nil {
+		next = curr.next
+		curr.next = prev
+
+		prev, curr = curr, next
+	}
+	l.Head = prev
 }
