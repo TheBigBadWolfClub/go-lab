@@ -373,6 +373,50 @@ func Test_dfsPostOrder(t *testing.T) {
 	}
 }
 
+func Test_bfsLevelOrder(t *testing.T) {
+
+	tests := []struct {
+		name string
+		tree *TreeNode
+		want []rune
+	}{
+		{
+			name: "nil tree",
+			tree: nil,
+			want: []rune{},
+		}, {
+			name: "root only",
+			tree: NewTree('4'),
+			want: []rune{'4'},
+		}, {
+			name: "level one full",
+			tree: NewTree('4', '3', '5'),
+			want: []rune{'4', '3', '5'},
+		}, {
+			name: "level two full",
+			tree: NewTree('5', '3', '4', '2', '7', '6', '8'),
+			want: []rune{'5', '3', '7', '2', '4', '6', '8'},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := bfsLevelOrder(tt.tree)
+			fmt.Println(string(got))
+			diff := cmp.Diff(got, tt.want)
+			if diff != "" {
+				t.Errorf("bfsLevelOrder() = %v, want %v", got, tt.want)
+			}
+
+			gotRec := bfsLevelOrderRecursive(tt.tree, []*TreeNode{})
+			fmt.Println(string(gotRec))
+			diffRec := cmp.Diff(gotRec, tt.want)
+			if diffRec != "" {
+				t.Errorf("bfsLevelOrder() = %v, want %v", gotRec, tt.want)
+			}
+		})
+	}
+}
+
 func Test_find(t *testing.T) {
 
 	tests := []struct {

@@ -101,10 +101,10 @@ func dfsInOrder(node *TreeNode) []rune {
 		return []rune{}
 	}
 
-	res := append([]rune{}, node.Value)
-	l := append(dfsInOrder(node.Left), res...)
+	l := dfsInOrder(node.Left)
+	lValue := append(l, node.Value)
 	r := dfsInOrder(node.Right)
-	return append(l, r...)
+	return append(lValue, r...)
 }
 
 func dfsPostOrder(node *TreeNode) []rune {
@@ -112,9 +112,51 @@ func dfsPostOrder(node *TreeNode) []rune {
 		return []rune{}
 	}
 
-	res := append([]rune{}, node.Value)
 	l := append(dfsPostOrder(node.Left), dfsPostOrder(node.Right)...)
-	return append(l, res...)
+	return append(l, node.Value)
+}
+
+func bfsLevelOrder(node *TreeNode) []rune {
+	var printQ []rune
+	if node == nil {
+		return []rune{}
+	}
+
+	var queue []*TreeNode
+	queue = append(queue, node)
+
+	for len(queue) > 0 {
+		printQ = append(printQ, queue[0].Value)
+		if queue[0].Left != nil {
+			queue = append(queue, queue[0].Left)
+		}
+		if queue[0].Right != nil {
+			queue = append(queue, queue[0].Right)
+		}
+		queue = queue[1:]
+	}
+
+	return printQ
+}
+
+func bfsLevelOrderRecursive(node *TreeNode, queue []*TreeNode) []rune {
+	var printQ []rune
+	if node == nil {
+		return []rune{}
+	}
+
+	if node.Left != nil {
+		queue = append(queue, node.Left)
+	}
+	if node.Right != nil {
+		queue = append(queue, node.Right)
+	}
+
+	printQ = append(printQ, node.Value)
+	if len(queue) == 0 {
+		return printQ
+	}
+	return append(printQ, bfsLevelOrderRecursive(queue[0], queue[1:])...)
 }
 
 func breadthFirstSearch(node *TreeNode, queue []*TreeNode) []rune {
