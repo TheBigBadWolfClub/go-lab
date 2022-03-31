@@ -35,7 +35,7 @@ func (b *BinaryTree[T]) Delete(value T) bool {
 	}
 
 	var ok bool
-	b.root, ok = delete(b.root, value)
+	b.root, ok = deleteNode(b.root, value)
 	return ok
 }
 
@@ -292,7 +292,7 @@ func bfsLevelOrderRecursive[T constraints.Ordered](queue []TreeNode[T]) []T {
 	return result
 }
 
-func delete[T constraints.Ordered](node *TreeNode[T], value T) (*TreeNode[T], bool) {
+func deleteNode[T constraints.Ordered](node *TreeNode[T], value T) (*TreeNode[T], bool) {
 
 	if node == nil {
 		return node, false
@@ -300,12 +300,12 @@ func delete[T constraints.Ordered](node *TreeNode[T], value T) (*TreeNode[T], bo
 
 	var ok bool
 	if value < node.Value {
-		node.Left, ok = delete(node.Left, value)
+		node.Left, ok = deleteNode(node.Left, value)
 		return node, ok
 	}
 
 	if value > node.Value {
-		node.Right, ok = delete(node.Right, value)
+		node.Right, ok = deleteNode(node.Right, value)
 		return node, ok
 	}
 
@@ -321,7 +321,7 @@ func delete[T constraints.Ordered](node *TreeNode[T], value T) (*TreeNode[T], bo
 	}
 
 	node.Value = minValue(node.Right)
-	node.Right, _ = delete(node.Right, node.Value)
+	node.Right, _ = deleteNode(node.Right, node.Value)
 	return node, true
 }
 

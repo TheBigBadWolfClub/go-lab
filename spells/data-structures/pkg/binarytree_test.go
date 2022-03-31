@@ -179,7 +179,7 @@ func TestBinaryTree_Delete(t *testing.T) {
 			value:    0,
 			want:     true,
 		}, {
-			name:     "delete on left leaf",
+			name:     "deleteNode on left leaf",
 			tree:     NewTree(1, 0, 2),
 			expected: NewTree(1, 2),
 			value:    0,
@@ -191,13 +191,13 @@ func TestBinaryTree_Delete(t *testing.T) {
 			value:    2,
 			want:     true,
 		}, {
-			name:     "delete root  with 2 leafs",
+			name:     "deleteNode root  with 2 leafs",
 			tree:     NewTree(1, 0, 2),
 			expected: NewTree(2, 0),
 			value:    1,
 			want:     true,
 		}, {
-			name:     "delete root  3 levels",
+			name:     "deleteNode root  3 levels",
 			tree:     NewTree(5, 3, 10, 4, 2, 6, 8, 7, 9),
 			expected: NewTree(5, 3, 6, 4, 2, 8, 7, 9),
 			value:    10,
