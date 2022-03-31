@@ -3,276 +3,435 @@ package pkg
 import (
 	"fmt"
 	"github.com/google/go-cmp/cmp"
-	"math"
+	"golang.org/x/exp/constraints"
+	"reflect"
 	"testing"
 )
 
-func NewTree(values ...rune) *TreeNode {
-	var tree *TreeNode
+var defaultArray []rune
+
+func NewTree[T constraints.Ordered](values ...T) *BinaryTree[T] {
+	b := &BinaryTree[T]{}
 	for _, v := range values {
-		tree = insert(tree, v)
+		b.Insert(v)
 	}
-	return tree
+	return b
 }
 
 func Test_Alpha(t *testing.T) {
+	tree := BinaryTree[rune]{}
+	tree.Insert('F')
+	tree.Insert('D')
+	tree.Insert('B')
+	tree.Insert('C')
+	tree.Insert('A')
 
-	var tree *TreeNode
-	tree = insert(tree, 'F')
-	insert(tree, 'D')
-	insert(tree, 'B')
-	insert(tree, 'C')
-	insert(tree, 'A')
-
-	s := tree.String()
+	s := tree.root.String()
 	fmt.Println(s)
 }
 
-func Test_insert(t *testing.T) {
+func TestBinaryTree_Insert(t *testing.T) {
 
 	tests := []struct {
-		name  string
-		tree  *TreeNode
-		value int
-		want  *TreeNode
+		name   string
+		expect *BinaryTree[int]
+		values []int
 	}{
 		{
-			name:  "first value of tree",
-			tree:  nil,
-			value: 4,
-			want: &TreeNode{
-				Left:  nil,
-				Value: 4,
-				Right: nil,
+			name: "treeNodeAdd root",
+			expect: &BinaryTree[int]{
+				root: &TreeNode[int]{Value: 0},
 			},
+			values: []int{0},
 		}, {
-			name: "value already in tree, do not add",
-			tree: &TreeNode{
-				Left:  nil,
-				Value: 4,
-				Right: nil,
-			},
-			value: 4,
-			want: &TreeNode{
-				Left:  nil,
-				Value: 4,
-				Right: nil,
-			},
-		}, {
-			name: "insert left of tree",
-			tree: &TreeNode{
-				Left:  nil,
-				Value: 4,
-				Right: nil,
-			},
-			value: 2,
-			want: &TreeNode{
-				Left: &TreeNode{
-					Left:  nil,
-					Value: 2,
-					Right: nil,
-				},
-				Value: 4,
-				Right: nil,
-			},
-		}, {
-			name: "insert right of tree",
-			tree: &TreeNode{
-				Left:  nil,
-				Value: 4,
-				Right: nil,
-			},
-			value: 6,
-			want: &TreeNode{
-				Left:  nil,
-				Value: 4,
-				Right: &TreeNode{
-					Left:  nil,
-					Value: 6,
-					Right: nil,
+			name: "treeNodeAdd root and left children",
+			expect: &BinaryTree[int]{
+				root: &TreeNode[int]{
+					Left:  &TreeNode[int]{Value: 0},
+					Value: 1,
 				},
 			},
+			values: []int{1, 0},
+		}, {
+			name: "treeNodeAdd root and right children",
+			expect: &BinaryTree[int]{
+				root: &TreeNode[int]{
+					Right: &TreeNode[int]{Value: 2},
+					Value: 1,
+				},
+			},
+			values: []int{1, 2},
+		}, {
+			name: "treeNodeAdd root and full children",
+			expect: &BinaryTree[int]{
+				root: &TreeNode[int]{
+					Right: &TreeNode[int]{Value: 2},
+					Left:  &TreeNode[int]{Value: 0},
+					Value: 1,
+				},
+			},
+			values: []int{1, 2, 0},
+		}, {
+			name: "3 levels full",
+			expect: &BinaryTree[int]{
+				root: &TreeNode[int]{
+					Right: &TreeNode[int]{
+						Left:  &TreeNode[int]{Value: 6},
+						Value: 7,
+						Right: &TreeNode[int]{Value: 8},
+					},
+					Left: &TreeNode[int]{
+						Left:  &TreeNode[int]{Value: 0},
+						Value: 1,
+						Right: &TreeNode[int]{Value: 2},
+					},
+					Value: 5,
+				},
+			},
+			values: []int{5, 1, 7, 0, 2, 6, 8},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := insert(tt.tree, rune(tt.value))
-			fmt.Println(got)
-			diff := cmp.Diff(got, tt.want)
+			tree := &BinaryTree[int]{}
+			for _, value := range tt.values {
+				tree.Insert(value)
+			}
+			diff := cmp.Diff(tree, tt.expect, cmp.AllowUnexported(BinaryTree[int]{}), cmp.AllowUnexported(BinaryTree[int]{}))
 			if diff != "" {
-				t.Errorf("insert() = %v, want %v", got, tt.want)
+				t.Errorf("fail to create tree: %s", diff)
 			}
 		})
 	}
 }
 
-func Test_maxDepth(t *testing.T) {
+func TestBinaryTree_Exists(t *testing.T) {
+	tests := []struct {
+		name  string
+		tree  *BinaryTree[int]
+		value int
+		want  bool
+	}{
+		{
+			name: "tree root is nil",
+			tree: &BinaryTree[int]{},
+			want: false,
+		}, {
+			name:  "only root, value not match",
+			tree:  NewTree(0),
+			value: 100,
+			want:  false,
+		}, {
+			name:  "only root, value  match",
+			tree:  NewTree(0),
+			value: 0,
+			want:  true,
+		}, {
+			name:  "found on left",
+			tree:  NewTree(1, 0, 2),
+			value: 0,
+			want:  true,
+		}, {
+			name:  "found on right",
+			tree:  NewTree(1, 0, 2),
+			value: 2,
+			want:  true,
+		}, {
+			name:  "not found",
+			tree:  NewTree(1, 0, 2),
+			value: 3,
+			want:  false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.tree.Exists(tt.value)
+			if tt.want != got {
+				t.Errorf("Exists() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestBinaryTree_Delete(t *testing.T) {
+	tests := []struct {
+		name     string
+		tree     *BinaryTree[int]
+		expected *BinaryTree[int]
+		value    int
+		want     bool
+	}{
+		{
+			name:     "tree root is nil",
+			tree:     &BinaryTree[int]{},
+			expected: &BinaryTree[int]{},
+			want:     false,
+		}, {
+			name:     "only root, value not match",
+			tree:     NewTree(0),
+			expected: NewTree(0),
+			value:    100,
+			want:     false,
+		}, {
+			name:     "only root, value  match",
+			tree:     NewTree(0),
+			expected: &BinaryTree[int]{},
+			value:    0,
+			want:     true,
+		}, {
+			name:     "delete on left leaf",
+			tree:     NewTree(1, 0, 2),
+			expected: NewTree(1, 2),
+			value:    0,
+			want:     true,
+		}, {
+			name:     "found on right leaf",
+			tree:     NewTree(1, 0, 2),
+			expected: NewTree(1, 0),
+			value:    2,
+			want:     true,
+		}, {
+			name:     "delete root  with 2 leafs",
+			tree:     NewTree(1, 0, 2),
+			expected: NewTree(2, 0),
+			value:    1,
+			want:     true,
+		}, {
+			name:     "delete root  3 levels",
+			tree:     NewTree(5, 3, 10, 4, 2, 6, 8, 7, 9),
+			expected: NewTree(5, 3, 6, 4, 2, 8, 7, 9),
+			value:    10,
+			want:     true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.tree.Delete(tt.value)
+			if tt.want != got {
+				t.Errorf("Delete() = %v, want %v", got, tt.want)
+			}
+
+			diff := cmp.Diff(tt.tree, tt.expected, cmp.AllowUnexported(BinaryTree[int]{}, BinaryTree[int]{}))
+			if diff != "" {
+				t.Errorf("Delete() =  %s", diff)
+			}
+		})
+	}
+}
+
+func TestBinaryTree_MaxDepth(t *testing.T) {
 
 	tests := []struct {
 		name string
-		tree *TreeNode
+		tree *BinaryTree[int]
 		want int
 	}{
 		{
-			name: "nil tree, maxDepth=0",
-			tree: nil,
+			name: "root is nil",
+			tree: &BinaryTree[int]{},
 			want: 0,
 		}, {
-			name: "only root, maxDepth=1",
-			tree: &TreeNode{
-				Left:  nil,
-				Value: 0,
-				Right: nil,
-			},
+			name: "only root",
+			tree: NewTree(0),
 			want: 1,
 		}, {
-			name: "level 2, maxDepth=2",
-			tree: NewTree('2', '1', '3'),
+			name: "left 2 levels",
+			tree: NewTree(1, 0),
 			want: 2,
 		}, {
-			name: "level 2 only right, maxDepth=2",
-			tree: NewTree('2', '3'),
+			name: "left 3 levels",
+			tree: NewTree(2, 1, 0),
+			want: 3,
+		}, {
+			name: "right 2 levels",
+			tree: NewTree(1, 2),
 			want: 2,
 		}, {
-			name: "level 2 only left, maxDepth=2",
-			tree: NewTree('2', '1'),
-			want: 2,
-		}, {
-			name: "only right nodes, maxDepth=10",
-			tree: NewTree('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'),
-			want: 10,
-		}, {
-			name: "only right nodes, maxDepth=10",
-			tree: NewTree('9', '8', '7', '6', '5', '4', '3', '2', '1', '0'),
-			want: 10,
+			name: "right 3 levels",
+			tree: NewTree(1, 2, 3),
+			want: 3,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			fmt.Println(tt.tree)
-			got := maxDepth(tt.tree)
+			got := tt.tree.MaxDepth()
 			if got != tt.want {
-				t.Errorf("maxDepth() = %v, want %v", got, tt.want)
+				t.Errorf("MaxDepth() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_reverse(t *testing.T) {
+func TestBinaryTree_Reverse(t *testing.T) {
+
 	tests := []struct {
-		name string
-		tree *TreeNode
-		want *TreeNode
+		name     string
+		tree     *BinaryTree[int]
+		expected *BinaryTree[int]
 	}{
 		{
-			name: "reverse",
-			tree: NewTree('2', '1', '3'),
-			want: &TreeNode{
-				Left:  &TreeNode{nil, '3', nil},
-				Value: '2',
-				Right: &TreeNode{nil, '1', nil},
+			name:     "is empty",
+			tree:     &BinaryTree[int]{},
+			expected: &BinaryTree[int]{},
+		}, {
+			name:     "only root",
+			tree:     NewTree(1),
+			expected: NewTree(1),
+		}, {
+			name: "2 level",
+
+			tree: NewTree(1, 0, 2),
+			expected: &BinaryTree[int]{
+				root: &TreeNode[int]{
+					Left:  &TreeNode[int]{Value: 2},
+					Value: 1,
+					Right: &TreeNode[int]{Value: 0},
+				},
 			},
 		}, {
-			name: "reverse",
-			tree: NewTree('3', '2', '1', '4', '5'),
-			want: &TreeNode{
-				Left:  &TreeNode{&TreeNode{nil, '5', nil}, '4', nil},
-				Value: '3',
-				Right: &TreeNode{nil, '2', &TreeNode{nil, '1', nil}},
+			name: "3 levels",
+			tree: NewTree(5, 3, 7, 2, 4, 6, 8),
+			expected: &BinaryTree[int]{
+				root: &TreeNode[int]{
+					Left: &TreeNode[int]{
+						Left:  &TreeNode[int]{Value: 8},
+						Value: 7,
+						Right: &TreeNode[int]{Value: 6},
+					},
+					Value: 5,
+					Right: &TreeNode[int]{
+						Left:  &TreeNode[int]{Value: 4},
+						Value: 3,
+						Right: &TreeNode[int]{Value: 2},
+					},
+				},
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := reverse(tt.tree)
-			fmt.Println(got)
-			diff := cmp.Diff(got, tt.want)
+			tt.tree.Reverse()
+			diff := cmp.Diff(tt.tree, tt.expected, cmp.AllowUnexported(BinaryTree[int]{}), cmp.AllowUnexported(BinaryTree[int]{}))
 			if diff != "" {
-				t.Errorf("reverse() = %v, want %v", got, tt.want)
+				t.Errorf("fail to reverse tree: %s", diff)
 			}
 		})
 	}
 }
 
-func Test_maxValue(t *testing.T) {
+func TestBinaryTree_MaxValue(t *testing.T) {
 
 	tests := []struct {
 		name string
-		tree *TreeNode
-		want float64
+		tree *BinaryTree[int]
+		want int
+		ok   bool
 	}{
 		{
-			name: "nil, expect infinity",
-			tree: nil,
-			want: math.Inf(-1),
+			name: "nil root",
+			tree: &BinaryTree[int]{},
+			want: 0,
+			ok:   false,
 		}, {
-			name: "only root",
-			tree: &TreeNode{nil, '1', nil},
-			want: '1',
+			name: "root is max",
+			tree: NewTree(1),
+			want: 1,
+			ok:   true,
 		}, {
-			name: "2 level",
-			tree: NewTree('5', '4', '6', '2', '3', '1'),
-			want: '6',
+			name: "root with children, max is root",
+			tree: NewTree(5, 3, 4),
+			want: 5,
+			ok:   true,
 		}, {
-			name: "some leaf",
-			tree: NewTree('5', '4', '6', '2', '3', '1', '8', '7', '9'),
-			want: '9',
+			name: "root with children, children is max",
+			tree: NewTree(5, 7, 9),
+			want: 9,
+			ok:   true,
+		}, {
+			name: "several levels, max is in the mid levels",
+			tree: NewTree(5, 7, 10, 8, 11, 9),
+			want: 11,
+			ok:   true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := maxValue(tt.tree); got != tt.want {
-				t.Errorf("maxValue() = %v, want %v", got, tt.want)
+
+			got, ok := tt.tree.MaxValue()
+			if ok != tt.ok {
+				t.Fatalf("MaxValue() ok = %v, want %v", ok, tt.ok)
 			}
+
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MaxValue() got = %v, want %v", got, tt.want)
+			}
+
 		})
 	}
 }
 
-func Test_minValue(t *testing.T) {
+func TestBinaryTree_MinValue(t *testing.T) {
 
 	tests := []struct {
 		name string
-		tree *TreeNode
-		want float64
-	}{{
-		name: "nil, expect infinity",
-		tree: nil,
-		want: math.Inf(1),
-	},
+		tree *BinaryTree[int]
+		want int
+		ok   bool
+	}{
 		{
-			name: "only root",
-			tree: &TreeNode{nil, '1', nil},
-			want: '1',
+			name: "nil root",
+			tree: &BinaryTree[int]{},
+			want: 0,
+			ok:   false,
 		}, {
-			name: "2 level",
-			tree: NewTree('7', '9', '8', '6', 'A'),
-			want: '6',
+			name: "root is max",
+			tree: NewTree(1),
+			want: 1,
+			ok:   true,
 		}, {
-			name: "some leaf",
-			tree: NewTree('5', '4', '6', '2', '3', '1'),
-			want: '1',
+			name: "root with children, max is root",
+			tree: NewTree(2, 3, 4),
+			want: 2,
+			ok:   true,
+		}, {
+			name: "root with children, children is max",
+			tree: NewTree(10, 7, 9),
+			want: 7,
+			ok:   true,
+		}, {
+			name: "several levels, max is in the mid levels",
+			tree: NewTree(5, 3, 2, 0, 1),
+			want: 0,
+			ok:   true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := minValue(tt.tree); got != tt.want {
-				t.Errorf("minValue() = %v, want %v", got, tt.want)
+
+			got, ok := tt.tree.MinValue()
+			if ok != tt.ok {
+				t.Fatalf("MinValue() ok = %v, want %v", ok, tt.ok)
 			}
+
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MinValue() got = %v, want %v", got, tt.want)
+			}
+
 		})
 	}
 }
 
-func Test_depthFirstSearch(t *testing.T) {
+func TestBinaryTree_DepthFirstSearch(t *testing.T) {
 
 	tests := []struct {
 		name string
-		tree *TreeNode
+		tree *BinaryTree[rune]
 		want []rune
 	}{
 		{
-			name: "nil tree",
-			tree: nil,
-			want: []rune{},
+			name: "nil root",
+			tree: &BinaryTree[rune]{},
+			want: defaultArray,
 		}, {
 			name: "root only",
 			tree: NewTree('4'),
@@ -289,27 +448,27 @@ func Test_depthFirstSearch(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := dfsPreOrder(tt.tree)
-			fmt.Println(string(got))
+			got := tt.tree.DFSPreOrder()
+			fmt.Println(got)
 			diff := cmp.Diff(got, tt.want)
 			if diff != "" {
-				t.Errorf("depthFirstSearch() = %v, want %v", got, tt.want)
+				t.Errorf("DFSPreOrder() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_dfsInOrder(t *testing.T) {
+func TestBinaryTree_DFSInOrder(t *testing.T) {
 
 	tests := []struct {
 		name string
-		tree *TreeNode
+		tree *BinaryTree[rune]
 		want []rune
 	}{
 		{
 			name: "nil tree",
-			tree: nil,
-			want: []rune{},
+			tree: &BinaryTree[rune]{},
+			want: defaultArray,
 		}, {
 			name: "root only",
 			tree: NewTree('4'),
@@ -326,27 +485,27 @@ func Test_dfsInOrder(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := dfsInOrder(tt.tree)
-			fmt.Println(string(got))
+			got := tt.tree.DFSInOrder()
+			fmt.Println(got)
 			diff := cmp.Diff(got, tt.want)
 			if diff != "" {
-				t.Errorf("depthFirstSearch() = %v, want %v", got, tt.want)
+				t.Errorf("DFSInOrder() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_dfsPostOrder(t *testing.T) {
+func TestBinaryTree_DFSPostOrder(t *testing.T) {
 
 	tests := []struct {
 		name string
-		tree *TreeNode
+		tree *BinaryTree[rune]
 		want []rune
 	}{
 		{
 			name: "nil tree",
-			tree: nil,
-			want: []rune{},
+			tree: &BinaryTree[rune]{},
+			want: defaultArray,
 		}, {
 			name: "root only",
 			tree: NewTree('4'),
@@ -363,137 +522,27 @@ func Test_dfsPostOrder(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := dfsPostOrder(tt.tree)
-			fmt.Println(string(got))
-			diff := cmp.Diff(got, tt.want)
-			if diff != "" {
-				t.Errorf("depthFirstSearch() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_bfsLevelOrder(t *testing.T) {
-
-	tests := []struct {
-		name string
-		tree *TreeNode
-		want []rune
-	}{
-		{
-			name: "nil tree",
-			tree: nil,
-			want: []rune{},
-		}, {
-			name: "root only",
-			tree: NewTree('4'),
-			want: []rune{'4'},
-		}, {
-			name: "level one full",
-			tree: NewTree('4', '3', '5'),
-			want: []rune{'4', '3', '5'},
-		}, {
-			name: "level two full",
-			tree: NewTree('5', '3', '4', '2', '7', '6', '8'),
-			want: []rune{'5', '3', '7', '2', '4', '6', '8'},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := bfsLevelOrder(tt.tree)
-			fmt.Println(string(got))
-			diff := cmp.Diff(got, tt.want)
-			if diff != "" {
-				t.Errorf("bfsLevelOrder() = %v, want %v", got, tt.want)
-			}
-
-			gotRec := bfsLevelOrderRecursive(tt.tree, []*TreeNode{})
-			fmt.Println(string(gotRec))
-			diffRec := cmp.Diff(gotRec, tt.want)
-			if diffRec != "" {
-				t.Errorf("bfsLevelOrder() = %v, want %v", gotRec, tt.want)
-			}
-		})
-	}
-}
-
-func Test_find(t *testing.T) {
-
-	tests := []struct {
-		name  string
-		tree  *TreeNode
-		value rune
-		want  bool
-	}{
-		{
-			name: "nil tree",
-			tree: nil,
-			want: false,
-		}, {
-			name:  "root only, is value",
-			tree:  NewTree('4'),
-			value: '4',
-			want:  true,
-		}, {
-			name:  "root only, is not value",
-			tree:  NewTree('4'),
-			value: '1',
-			want:  false,
-		}, {
-			name:  "level 1, is  value at left",
-			tree:  NewTree('4', '3', '5'),
-			value: '3',
-			want:  true,
-		}, {
-			name:  "level 1, is  value at right",
-			tree:  NewTree('4', '3', '5'),
-			value: '5',
-			want:  true,
-		}, {
-			name:  "level 1, value not found",
-			tree:  NewTree('4', '3', '5'),
-			value: '1',
-			want:  false,
-		}, {
-			name:  "level 2, value not found",
-			tree:  NewTree('4', '3', '5', '2', '6'),
-			value: '1',
-			want:  false,
-		}, {
-			name:  "level 2, value  found at left",
-			tree:  NewTree('4', '3', '5', '2', '6'),
-			value: '2',
-			want:  true,
-		}, {
-			name:  "level 2, value  found at right",
-			tree:  NewTree('4', '3', '5', '2', '6'),
-			value: '6',
-			want:  true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := find(tt.tree, tt.value)
+			got := tt.tree.DFSPostOrder()
 			fmt.Println(got)
 			diff := cmp.Diff(got, tt.want)
 			if diff != "" {
-				t.Errorf("depthFirstSearch() = %v, want %v", got, tt.want)
+				t.Errorf("DFSPostOrder() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_breadthFirstSearch(t *testing.T) {
+func TestBinaryTree_BFSLevelOrder(t *testing.T) {
 
 	tests := []struct {
 		name string
-		tree *TreeNode
+		tree *BinaryTree[rune]
 		want []rune
 	}{
 		{
 			name: "nil tree",
-			tree: nil,
-			want: []rune{},
+			tree: &BinaryTree[rune]{},
+			want: defaultArray,
 		}, {
 			name: "root only",
 			tree: NewTree('4'),
@@ -510,11 +559,48 @@ func Test_breadthFirstSearch(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := breadthFirstSearch(tt.tree, nil)
-			fmt.Println(string(got))
+			got := tt.tree.BFSLevelOrder()
+			fmt.Println(got)
 			diff := cmp.Diff(got, tt.want)
 			if diff != "" {
-				t.Errorf("depthFirstSearch() = %v, want %v", got, tt.want)
+				t.Errorf("BFSLevelOrder() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestBinaryTree_BFSLevelOrderRecursive(t *testing.T) {
+
+	tests := []struct {
+		name string
+		tree *BinaryTree[rune]
+		want []rune
+	}{
+		{
+			name: "nil tree",
+			tree: &BinaryTree[rune]{},
+			want: defaultArray,
+		}, {
+			name: "root only",
+			tree: NewTree('4'),
+			want: []rune{'4'},
+		}, {
+			name: "level one full",
+			tree: NewTree('4', '3', '5'),
+			want: []rune{'4', '3', '5'},
+		}, {
+			name: "level two full",
+			tree: NewTree('5', '3', '4', '2', '7', '6', '8'),
+			want: []rune{'5', '3', '7', '2', '4', '6', '8'},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.tree.BFSLevelOrderRecursive()
+			fmt.Println(got)
+			diff := cmp.Diff(got, tt.want)
+			if diff != "" {
+				t.Errorf("BFSLevelOrderRecursive() = %v, want %v", got, tt.want)
 			}
 		})
 	}

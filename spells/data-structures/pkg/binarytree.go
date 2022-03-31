@@ -2,211 +2,330 @@ package pkg
 
 import (
 	"fmt"
+	"golang.org/x/exp/constraints"
 	"math"
 )
 
 const strNilNode = "_"
 
-type TreeNode struct {
-	Left  *TreeNode
-	Value rune
-	Right *TreeNode
+type BinaryTree[T constraints.Ordered] struct {
+	root *TreeNode[T]
 }
 
-func insert(t *TreeNode, v rune) *TreeNode {
-	if t == nil {
-		return &TreeNode{Left: nil, Value: v, Right: nil}
+func (b *BinaryTree[T]) Insert(value T) {
+	if b.root == nil {
+		b.root = &TreeNode[T]{Value: value}
+		return
 	}
 
-	if t.Value > v {
-		t.Left = insert(t.Left, v)
-	} else if t.Value < v {
-		t.Right = insert(t.Right, v)
-	}
-	return t
+	treeNodeAdd(b.root, value)
 }
 
-func find(node *TreeNode, value rune) bool {
-	if node == nil {
+func (b *BinaryTree[T]) Exists(value T) bool {
+	if b.root == nil {
 		return false
 	}
 
-	if node.Value > value {
-		return find(node.Left, value)
-	}
-
-	if node.Value < value {
-		return find(node.Right, value)
-	}
-	return node.Value == value
+	return treeNodeExists(b.root, value)
 }
 
-func maxDepth(t *TreeNode) int {
-	if t == nil {
+func (b *BinaryTree[T]) Delete(value T) bool {
+	if b.root == nil {
+		return false
+	}
+
+	var ok bool
+	b.root, ok = delete(b.root, value)
+	return ok
+}
+
+func (b *BinaryTree[T]) MaxDepth() int {
+	if b.root == nil {
 		return 0
 	}
-	left := float64(maxDepth(t.Left))
-	right := float64(maxDepth(t.Right))
-	return 1 + int(math.Max(left, right))
+	return maxDepth(b.root)
 }
 
-func reverse(t *TreeNode) *TreeNode {
-	if t == nil {
-		return nil
+func (b *BinaryTree[T]) Reverse() {
+	if b.root == nil {
+		return
+	}
+	reverse(b.root)
+}
+
+func (b *BinaryTree[T]) MaxValue() (T, bool) {
+	if b.root == nil {
+		var zero T
+		return zero, false
+	}
+	return maxValue(b.root), true
+}
+
+func (b *BinaryTree[T]) MinValue() (T, bool) {
+	if b.root == nil {
+		var zero T
+		return zero, false
+	}
+	return minValue(b.root), true
+}
+
+func (b *BinaryTree[T]) DFSPreOrder() []T {
+	var result []T
+	if b.root == nil {
+		return result
 	}
 
-	t.Left, t.Right = reverse(t.Right), reverse(t.Left)
-	return t
+	return dfsPreOrder(b.root)
 }
 
-func maxValue(t *TreeNode) float64 {
-	if t == nil {
-		return math.Inf(-1)
+func (b *BinaryTree[T]) DFSInOrder() []T {
+	var result []T
+	if b.root == nil {
+		return result
 	}
 
-	l := maxValue(t.Left)
-	r := maxValue(t.Right)
-	return math.Max(float64(t.Value), math.Max(l, r))
+	return dfsInOrder(b.root)
 }
 
-func minValue(t *TreeNode) float64 {
-	if t == nil {
-		return math.Inf(1)
+func (b *BinaryTree[T]) DFSPostOrder() []T {
+	var result []T
+	if b.root == nil {
+		return result
 	}
 
-	l := minValue(t.Left)
-	r := minValue(t.Right)
-	mx := math.Min(l, r)
-	return math.Min(mx, float64(t.Value))
+	return dfsPostOrder(b.root)
 }
 
-func depthFirstSearch(node *TreeNode) []rune {
+func (b *BinaryTree[T]) BFSLevelOrder() []T {
+	var result []T
+	if b.root == nil {
+		return result
+	}
 
+	nodes := []TreeNode[T]{*b.root}
+	return bfsLevelOrder(nodes)
+}
+
+func (b *BinaryTree[T]) BFSLevelOrderRecursive() []T {
+	var result []T
+	if b.root == nil {
+		return result
+	}
+
+	nodes := []TreeNode[T]{*b.root}
+	return bfsLevelOrderRecursive(nodes)
+}
+
+type TreeNode[T constraints.Ordered] struct {
+	Left  *TreeNode[T]
+	Value T
+	Right *TreeNode[T]
+}
+
+func treeNodeAdd[T constraints.Ordered](node *TreeNode[T], value T) {
+	if node.Left == nil && value < node.Value {
+		node.Left = &TreeNode[T]{Value: value}
+
+	}
+
+	if node.Right == nil && value > node.Value {
+		node.Right = &TreeNode[T]{Value: value}
+	}
+
+	if value < node.Value {
+		treeNodeAdd(node.Left, value)
+	}
+
+	if value > node.Value {
+		treeNodeAdd(node.Right, value)
+	}
+}
+
+func treeNodeExists[T constraints.Ordered](node *TreeNode[T], value T) bool {
 	if node == nil {
-		return []rune{}
+		return false
+	}
+	if value == node.Value {
+		return true
+	}
+	if value < node.Value {
+		return treeNodeExists(node.Left, value)
+	}
+	if value > node.Value {
+		return treeNodeExists(node.Right, value)
 	}
 
-	res := append([]rune{}, node.Value)
-	res = append(res, depthFirstSearch(node.Left)...)
-	res = append(res, depthFirstSearch(node.Right)...)
-	return res
+	return false
 }
 
-func dfsPreOrder(node *TreeNode) []rune {
-	return depthFirstSearch(node)
-}
-
-func dfsInOrder(node *TreeNode) []rune {
+func maxDepth[T constraints.Ordered](node *TreeNode[T]) int {
 	if node == nil {
-		return []rune{}
+		return 0
 	}
 
-	l := dfsInOrder(node.Left)
-	lValue := append(l, node.Value)
-	r := dfsInOrder(node.Right)
-	return append(lValue, r...)
+	r := maxDepth(node.Right) + 1
+	l := maxDepth(node.Left) + 1
+	max := math.Max(float64(r), float64(l))
+	return int(max)
 }
 
-func dfsPostOrder(node *TreeNode) []rune {
+func reverse[T constraints.Ordered](node *TreeNode[T]) {
 	if node == nil {
-		return []rune{}
+		return
 	}
 
-	l := append(dfsPostOrder(node.Left), dfsPostOrder(node.Right)...)
-	return append(l, node.Value)
+	node.Right, node.Left = node.Left, node.Right
+	reverse(node.Left)
+	reverse(node.Right)
 }
 
-func bfsLevelOrder(node *TreeNode) []rune {
-	var printQ []rune
-	if node == nil {
-		return []rune{}
+func maxValue[T constraints.Ordered](node *TreeNode[T]) T {
+
+	max := node.Value
+
+	if node.Right != nil {
+		if r := maxValue(node.Right); r > max {
+			max = r
+		}
 	}
 
-	var queue []*TreeNode
-	queue = append(queue, node)
+	if node.Left != nil {
+		if l := maxValue(node.Left); l > max {
+			max = l
+		}
+	}
 
+	return max
+
+}
+
+func minValue[T constraints.Ordered](node *TreeNode[T]) T {
+	max := node.Value
+
+	if node.Right != nil {
+		if r := minValue(node.Right); r < max {
+			max = r
+		}
+	}
+
+	if node.Left != nil {
+		if l := minValue(node.Left); l < max {
+			max = l
+		}
+	}
+
+	return max
+}
+
+func dfsPreOrder[T constraints.Ordered](node *TreeNode[T]) []T {
+	var result []T
+	if node == nil {
+		return result
+	}
+
+	result = append(result, node.Value)
+	result = append(result, dfsPreOrder(node.Left)...)
+	result = append(result, dfsPreOrder(node.Right)...)
+	return result
+}
+
+func dfsInOrder[T constraints.Ordered](node *TreeNode[T]) []T {
+	var result []T
+	if node == nil {
+		return result
+	}
+
+	result = append(result, dfsInOrder(node.Left)...)
+	result = append(result, node.Value)
+	result = append(result, dfsInOrder(node.Right)...)
+	return result
+}
+
+func dfsPostOrder[T constraints.Ordered](node *TreeNode[T]) []T {
+	var result []T
+	if node == nil {
+		return result
+	}
+
+	result = append(result, dfsPostOrder(node.Left)...)
+	result = append(result, dfsPostOrder(node.Right)...)
+	result = append(result, node.Value)
+	return result
+}
+
+func bfsLevelOrder[T constraints.Ordered](queue []TreeNode[T]) []T {
+	var result []T
 	for len(queue) > 0 {
-		printQ = append(printQ, queue[0].Value)
+		result = append(result, queue[0].Value)
 		if queue[0].Left != nil {
-			queue = append(queue, queue[0].Left)
+			queue = append(queue, *queue[0].Left)
 		}
+
 		if queue[0].Right != nil {
-			queue = append(queue, queue[0].Right)
+			queue = append(queue, *queue[0].Right)
 		}
+
 		queue = queue[1:]
 	}
-
-	return printQ
+	return result
 }
 
-func bfsLevelOrderRecursive(node *TreeNode, queue []*TreeNode) []rune {
-	var printQ []rune
-	if node == nil {
-		return []rune{}
-	}
-
-	if node.Left != nil {
-		queue = append(queue, node.Left)
-	}
-	if node.Right != nil {
-		queue = append(queue, node.Right)
-	}
-
-	printQ = append(printQ, node.Value)
+func bfsLevelOrderRecursive[T constraints.Ordered](queue []TreeNode[T]) []T {
+	var result []T
 	if len(queue) == 0 {
-		return printQ
+		return result
 	}
-	return append(printQ, bfsLevelOrderRecursive(queue[0], queue[1:])...)
+
+	cur := queue[0]
+	result = append(result, cur.Value)
+	if cur.Left != nil {
+		queue = append(queue, *cur.Left)
+	}
+	if cur.Left != nil {
+		queue = append(queue, *cur.Right)
+	}
+
+	if len(queue) > 0 {
+		return append(result, bfsLevelOrderRecursive(queue[1:])...)
+	}
+
+	return result
 }
 
-func breadthFirstSearch(node *TreeNode, queue []*TreeNode) []rune {
+func delete[T constraints.Ordered](node *TreeNode[T], value T) (*TreeNode[T], bool) {
 
 	if node == nil {
-		return []rune{}
+		return node, false
 	}
 
-	if node.Left != nil {
-		queue = append(queue, node.Left)
+	var ok bool
+	if value < node.Value {
+		node.Left, ok = delete(node.Left, value)
+		return node, ok
 	}
 
-	if node.Right != nil {
-		queue = append(queue, node.Right)
+	if value > node.Value {
+		node.Right, ok = delete(node.Right, value)
+		return node, ok
 	}
 
-	res := append([]rune{}, node.Value)
-	if len(queue) == 0 {
-		return res
+	if node.Left == nil && node.Right == nil {
+		return nil, true
 	}
 
-	next, reminder := queue[:1], queue[1:]
-	res = append(res, breadthFirstSearch(next[0], reminder)...)
-	return res
+	if node.Left == nil {
+		return node.Right, true
+	}
+	if node.Right == nil {
+		return node.Left, true
+	}
+
+	node.Value = minValue(node.Right)
+	node.Right, _ = delete(node.Right, node.Value)
+	return node, true
 }
 
-func delete(node *TreeNode, value rune) *TreeNode {
-	if node == nil {
-		return nil
-	}
-
-	if node.Value == value {
-		if node.Left == nil && node.Right == nil {
-			return nil
-		}
-		if node.Left == nil && node.Right != nil {
-			node = node.Right
-			return node
-		}
-
-		if node.Left != nil && node.Right == nil {
-			node = node.Left
-			return node
-		}
-	}
-
-	return nil
-}
-
-func (t *TreeNode) String() string {
+func (t *TreeNode[T]) String() string {
 	if t == nil {
 		return "nil"
 	}
@@ -221,5 +340,5 @@ func (t *TreeNode) String() string {
 		right = t.Right.String()
 	}
 
-	return fmt.Sprintf("(%s %s %s)", left, string(t.Value), right)
+	return fmt.Sprintf("(%s %v %s)", left, t.Value, right)
 }
