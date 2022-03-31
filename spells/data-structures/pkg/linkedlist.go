@@ -2,19 +2,7 @@ package pkg
 
 type LinkedList[T any] struct {
 	Len  int
-	Head *LinkedListNode[T]
-}
-
-type LinkedListNode[T any] struct {
-	next  *LinkedListNode[T]
-	value T
-}
-
-func NewSingleListNode[T any](v T) *LinkedListNode[T] {
-	return &LinkedListNode[T]{
-		next:  nil,
-		value: v,
-	}
+	Head *linkedListNode[T]
 }
 
 func (l *LinkedList[T]) Add(v T) {
@@ -25,12 +13,12 @@ func (l *LinkedList[T]) Add(v T) {
 		return
 	}
 
-	tail := l.tail()
+	tail := l.Tail()
 	tail.next = newNode
 	l.Len++
 }
 
-func (l *LinkedList[T]) AddNode(v *LinkedListNode[T]) {
+func (l *LinkedList[T]) AddNode(v *linkedListNode[T]) {
 
 	if l.Head == nil {
 		l.Head = v
@@ -38,7 +26,7 @@ func (l *LinkedList[T]) AddNode(v *LinkedListNode[T]) {
 		return
 	}
 
-	tail := l.tail().next
+	tail := l.Tail().next
 	tail.next = v
 }
 
@@ -89,7 +77,7 @@ func (l *LinkedList[T]) Size() int {
 	return l.Len
 }
 
-func (l *LinkedList[T]) tail() *LinkedListNode[T] {
+func (l *LinkedList[T]) Tail() *linkedListNode[T] {
 	if l.Head == nil || l.Len == 0 {
 		return nil
 	}
@@ -101,7 +89,7 @@ func (l *LinkedList[T]) tail() *LinkedListNode[T] {
 	return cur
 }
 
-func (l *LinkedList[T]) deleteHead() (ok bool) {
+func (l *LinkedList[T]) DeleteHead() (ok bool) {
 	if l.Head == nil {
 		return true
 	}
@@ -111,7 +99,7 @@ func (l *LinkedList[T]) deleteHead() (ok bool) {
 	return true
 }
 
-func (l *LinkedList[T]) delete(index int) (ok bool) {
+func (l *LinkedList[T]) DeleteIndex(index int) (ok bool) {
 	cur := l.Head
 	for i := 0; i < index; i++ {
 		cur = cur.next
@@ -125,15 +113,29 @@ func (l *LinkedList[T]) delete(index int) (ok bool) {
 }
 
 func (l *LinkedList[T]) Reverse() {
-	curr := l.Head
-	var prev *LinkedListNode[T]
-	var next *LinkedListNode[T]
+	var cur, next, prev *linkedListNode[T]
+	cur = l.Head
+	for cur != nil {
+		// swap
+		next = cur.next
+		cur.next = prev
 
-	for curr != nil {
-		next = curr.next
-		curr.next = prev
-
-		prev, curr = curr, next
+		// prepare next
+		prev = cur
+		cur = next // b
 	}
+
 	l.Head = prev
+}
+
+type linkedListNode[T any] struct {
+	next  *linkedListNode[T]
+	value T
+}
+
+func NewSingleListNode[T any](v T) *linkedListNode[T] {
+	return &linkedListNode[T]{
+		next:  nil,
+		value: v,
+	}
 }

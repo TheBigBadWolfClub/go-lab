@@ -20,7 +20,7 @@ func TestSingleLinkList_Add(t *testing.T) {
 			list:  LinkedList[int]{},
 			expected: LinkedList[int]{
 				Len: 1,
-				Head: &LinkedListNode[int]{
+				Head: &linkedListNode[int]{
 					next:  nil,
 					value: 0,
 				},
@@ -30,15 +30,15 @@ func TestSingleLinkList_Add(t *testing.T) {
 			value: 1,
 			list: LinkedList[int]{
 				Len: 1,
-				Head: &LinkedListNode[int]{
+				Head: &linkedListNode[int]{
 					next:  nil,
 					value: 0,
 				},
 			},
 			expected: LinkedList[int]{
 				Len: 2,
-				Head: &LinkedListNode[int]{
-					next: &LinkedListNode[int]{
+				Head: &linkedListNode[int]{
+					next: &linkedListNode[int]{
 						next:  nil,
 						value: 1,
 					},
@@ -53,9 +53,9 @@ func TestSingleLinkList_Add(t *testing.T) {
 			t.Parallel()
 			tt.list.Add(tt.value)
 
-			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(LinkedListNode[int]{}, LinkedListNode[int]{}))
+			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(linkedListNode[int]{}, linkedListNode[int]{}))
 			if diff != "" {
-				t.Errorf("fail to add to list: %s", diff)
+				t.Errorf("fail to treeNodeAdd to list: %s", diff)
 			}
 		})
 	}
@@ -129,19 +129,19 @@ func TestSingleLinkList_Delete(t *testing.T) {
 			list:     &LinkedList[int]{},
 			expected: &LinkedList[int]{},
 		}, {
-			name:     "delete  index 0",
+			name:     "DeleteIndex  index 0",
 			index:    0,
 			want:     nil,
 			list:     buildTestList(0, 1, 2),
 			expected: buildTestList(1, 2),
 		}, {
-			name:     "delete  index 1",
+			name:     "DeleteIndex  index 1",
 			index:    1,
 			want:     nil,
 			list:     buildTestList(0, 1, 2),
 			expected: buildTestList(0, 2),
 		}, {
-			name:     "delete  last index ",
+			name:     "DeleteIndex  last index ",
 			index:    2,
 			want:     nil,
 			list:     buildTestList(0, 1, 2),
@@ -165,9 +165,9 @@ func TestSingleLinkList_Delete(t *testing.T) {
 
 			}
 
-			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(LinkedListNode[int]{}, LinkedListNode[int]{}))
+			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(linkedListNode[int]{}, linkedListNode[int]{}))
 			if diff != "" {
-				t.Errorf("unexpect list after delete: %s", diff)
+				t.Errorf("unexpect list after DeleteIndex: %s", diff)
 			}
 		})
 	}
@@ -239,7 +239,7 @@ func TestSingleLinkList_tail(t *testing.T) {
 	tests := []struct {
 		name string
 		list *LinkedList[int]
-		want *LinkedListNode[int]
+		want *linkedListNode[int]
 	}{
 		{
 			name: "empty list",
@@ -248,14 +248,14 @@ func TestSingleLinkList_tail(t *testing.T) {
 		}, {
 			name: "one item",
 			list: buildTestList(0),
-			want: &LinkedListNode[int]{
+			want: &linkedListNode[int]{
 				next:  nil,
 				value: 0,
 			},
 		}, {
-			name: "two item",
+			name: "three item",
 			list: buildTestList(0, 1, 2),
-			want: &LinkedListNode[int]{
+			want: &linkedListNode[int]{
 				next:  nil,
 				value: 2,
 			},
@@ -265,10 +265,10 @@ func TestSingleLinkList_tail(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			tail := tt.list.tail()
-			diff := cmp.Diff(tail, tt.want, cmp.AllowUnexported(LinkedListNode[int]{}))
+			tail := tt.list.Tail()
+			diff := cmp.Diff(tail, tt.want, cmp.AllowUnexported(linkedListNode[int]{}))
 			if diff != "" {
-				t.Errorf("unexpect list after delete: %s", diff)
+				t.Errorf("unexpect list after DeleteIndex: %s", diff)
 			}
 		})
 	}
@@ -305,8 +305,8 @@ func TestSingleLinkList_deleteHead(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			if gotOk := tt.list.deleteHead(); gotOk != tt.wantOk {
-				t.Errorf("deleteHead() = %v, want %v", gotOk, tt.wantOk)
+			if gotOk := tt.list.DeleteHead(); gotOk != tt.wantOk {
+				t.Errorf("DeleteHead() = %v, want %v", gotOk, tt.wantOk)
 			}
 		})
 	}
@@ -347,7 +347,7 @@ func TestSingleLinkList_Reverse(t *testing.T) {
 			t.Parallel()
 			tt.list.Reverse()
 			fmt.Println(tt.list)
-			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(LinkedListNode[int]{}, LinkedListNode[int]{}))
+			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(linkedListNode[int]{}, linkedListNode[int]{}))
 			if diff != "" {
 				t.Errorf("fail to reverse list: %s", diff)
 			}
