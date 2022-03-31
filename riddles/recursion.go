@@ -1,6 +1,6 @@
 package riddles
 
-import "constraints"
+import "golang.org/x/exp/constraints"
 
 func Factorial[T constraints.Unsigned](i T) T {
 	if i <= 1 {
@@ -31,7 +31,9 @@ func FibonacciSequence[T constraints.Unsigned](n T) []T {
 		return []T{0, 1}
 	}
 
-	return append(FibonacciSequence(n-1), FibonacciNumber(n-2)+FibonacciNumber(n-1))
+	var seq []T
+	seq = FibonacciSequence(n - 1)
+	return append(seq, FibonacciNumber(n-2)+FibonacciNumber(n-1))
 }
 
 func GreatestCommonDivisor[T constraints.Unsigned](x, y T) T {
