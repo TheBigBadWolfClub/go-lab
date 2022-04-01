@@ -355,6 +355,97 @@ func TestSingleLinkList_Reverse(t *testing.T) {
 	}
 }
 
+func TestSingleLinkList_ReverseRecursive(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name     string
+		list     *LinkedList[int]
+		expected *LinkedList[int]
+	}{
+		{
+			name:     "reverse empty",
+			list:     &LinkedList[int]{},
+			expected: &LinkedList[int]{},
+		}, {
+			name:     "one elem list",
+			list:     buildTestList(1),
+			expected: buildTestList(1),
+		}, {
+			name:     "two elem list",
+			list:     buildTestList(1, 2),
+			expected: buildTestList(2, 1),
+		}, {
+			name:     "3 elem list",
+			list:     buildTestList(0, 1, 2),
+			expected: buildTestList(2, 1, 0),
+		}, {
+			name:     "10 elem list",
+			list:     buildTestList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+			expected: buildTestList(9, 8, 7, 6, 5, 4, 3, 2, 1, 0),
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			tt.list.ReverseRecursive()
+			fmt.Println(tt.list)
+			diff := cmp.Diff(tt.list, tt.expected, cmp.AllowUnexported(linkedListNode[int]{}, linkedListNode[int]{}))
+			if diff != "" {
+				t.Errorf("fail to reverse list: %s", diff)
+			}
+		})
+	}
+}
+
+func TestSingleLinkList_Traverse(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name     string
+		list     *LinkedList[int]
+		expected []int
+	}{
+		{
+			name:     "reverse empty",
+			list:     &LinkedList[int]{},
+			expected: nil,
+		}, {
+			name:     "one elem list",
+			list:     buildTestList(1),
+			expected: []int{1},
+		}, {
+			name:     "two elem list",
+			list:     buildTestList(1, 2),
+			expected: []int{1, 2},
+		}, {
+			name:     "3 elem list",
+			list:     buildTestList(0, 1, 2),
+			expected: []int{0, 1, 2},
+		}, {
+			name:     "10 elem list",
+			list:     buildTestList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+			expected: []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			traverse := tt.list.Traverse()
+			diff := cmp.Diff(traverse, tt.expected)
+			if diff != "" {
+				t.Errorf("Traverse: %s", diff)
+			}
+
+			recursive := tt.list.TraverseRecursive()
+			diff = cmp.Diff(recursive, tt.expected)
+			if diff != "" {
+				t.Errorf("TraverseRecursive: %s", diff)
+			}
+		})
+	}
+}
+
 func buildTestList(values ...int) *LinkedList[int] {
 	var list LinkedList[int]
 	for _, v := range values {

@@ -6,7 +6,11 @@ type LinkedList[T any] struct {
 }
 
 func (l *LinkedList[T]) Add(v T) {
-	newNode := NewSingleListNode(v)
+	newNode := &linkedListNode[T]{
+		next:  nil,
+		value: v,
+	}
+
 	if l.Head == nil {
 		l.Head = newNode
 		l.Len++
@@ -128,14 +132,49 @@ func (l *LinkedList[T]) Reverse() {
 	l.Head = prev
 }
 
+func (l *LinkedList[T]) ReverseRecursive() {
+	if l.Head == nil {
+		return
+	}
+
+	var recursive func(*linkedListNode[T])
+	recursive = func(rev *linkedListNode[T]) {
+		if rev.next == nil {
+			l.Head = rev
+			return
+		}
+		recursive(rev.next)
+		next := rev.next.next
+		rev.next.next = rev
+		rev.next = next
+	}
+
+	recursive(l.Head)
+}
+
+func (l *LinkedList[T]) TraverseRecursive() []T {
+	var recursive func(node *linkedListNode[T]) []T
+	recursive = func(node *linkedListNode[T]) []T {
+		if node == nil {
+			var arr []T
+			return arr
+		}
+		return append([]T{node.value}, recursive(node.next)...)
+	}
+	return recursive(l.Head)
+}
+
+func (l *LinkedList[T]) Traverse() []T {
+	var arr []T
+	cur := l.Head
+	for cur != nil {
+		arr = append(arr, cur.value)
+		cur = cur.next
+	}
+	return arr
+}
+
 type linkedListNode[T any] struct {
 	next  *linkedListNode[T]
 	value T
-}
-
-func NewSingleListNode[T any](v T) *linkedListNode[T] {
-	return &linkedListNode[T]{
-		next:  nil,
-		value: v,
-	}
 }
