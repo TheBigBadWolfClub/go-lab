@@ -229,6 +229,87 @@ func TestGraph_DFSLevelOrder(t *testing.T) {
 	}
 }
 
+func TestGraph_Dijkstra(t *testing.T) {
+
+	tests := []struct {
+		graph *Graph[rune]
+		start rune
+		end   rune
+		cost  int
+		want  []rune
+	}{
+		{
+			graph: NewGraph[rune](),
+			start: 'A',
+			end:   'A',
+			want:  nil,
+		}, {
+			graph: buildTestGraph[rune]([]rune{'A'}, []edgeCreate[rune]{}),
+			start: 'A',
+			end:   'A',
+			want:  nil,
+		}, {
+			graph: buildTestGraph[rune]([]rune{'A', 'B'}, []edgeCreate[rune]{{'A', 'B', 10}}),
+			start: 'A',
+			end:   'B',
+			want:  []rune{'A', 'B'},
+			cost:  10,
+		}, {
+			graph: buildTestGraph[rune]([]rune{'A', 'B', 'C'}, []edgeCreate[rune]{{'A', 'B', 2}, {'A', 'C', 10}, {'B', 'C', 2}}),
+			start: 'A',
+			end:   'C',
+			want:  []rune{'A', 'B', 'C'},
+			cost:  4,
+		}, {
+			graph: buildTestGraph[rune]([]rune{'A', 'B', 'C', 'D', 'E', 'F'}, []edgeCreate[rune]{
+				{'A', 'B', 2}, {'A', 'C', 10},
+				{'B', 'C', 2},
+				{'C', 'D', 2}, {'C', 'E', 2},
+				{'D', 'E', 10},
+			}),
+			start: 'A',
+			end:   'E',
+			want:  []rune{'A', 'B', 'C', 'E'},
+			cost:  6,
+		}, {
+			graph: buildTestGraph[rune]([]rune{'A', 'B', 'C', 'D', 'E', 'F'}, []edgeCreate[rune]{
+				{'A', 'B', 2}, {'A', 'C', 10},
+				{'B', 'C', 2},
+				{'C', 'D', 2}, {'C', 'E', 2},
+				{'D', 'E', 10},
+			}),
+			start: 'B',
+			end:   'C',
+			want:  []rune{'B', 'C'},
+			cost:  2,
+		}, {
+			graph: buildTestGraph[rune]([]rune{'A', 'B', 'C', 'D', 'E', 'F'}, []edgeCreate[rune]{
+				{'A', 'B', 2}, {'A', 'C', 10},
+				{'B', 'C', 2},
+				{'C', 'D', 2}, {'C', 'E', 2},
+				{'D', 'E', 10},
+			}),
+			start: 'C',
+			end:   'E',
+			want:  []rune{'C', 'E'},
+			cost:  2,
+		},
+	}
+	for _, tt := range tests {
+		t.Run("test", func(t *testing.T) {
+			got, cost := tt.graph.Dijkstra(tt.start, tt.end)
+			diff := cmp.Diff(tt.want, got)
+			if diff != "" {
+				t.Fatalf("ShortPathUnweighted() : %s", diff)
+			}
+
+			if cost != tt.cost {
+				t.Fatalf("ShortPathUnweighted() cost: %d, got: %d", tt.cost, cost)
+			}
+		})
+	}
+}
+
 func TestGraph_ShortPathUnweighted(t *testing.T) {
 
 	tests := []struct {

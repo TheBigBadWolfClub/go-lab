@@ -2,7 +2,9 @@ package pkg
 
 import (
 	"fmt"
+	"github.com/TheBigBadWolfClub/go-lab/spells/data-structures/internal"
 	"golang.org/x/exp/constraints"
+	"math"
 	"strings"
 )
 
@@ -79,6 +81,10 @@ func (g *Graph[T]) DFSLevelOrder(start T) []T {
 	return graphDFSLevelOrder(start, g.nodes)
 }
 
+func (g *Graph[T]) Dijkstra(start T, end T) ([]T, int) {
+	return dijkstra(start, end, g.nodes)
+}
+
 func (g *Graph[T]) ShortPathUnweighted(start T, end T) []T {
 	return shortPathUnweighted(start, end, g.nodes)
 }
@@ -128,7 +134,39 @@ func graphDFSLevelOrder[T constraints.Ordered](start T, nodes map[T][]*GraphEdge
 }
 
 func shortPathUnweighted[T constraints.Ordered](start, end T, nodes map[T][]*GraphEdge[T]) []T {
+
 	return nil
+}
+
+func dijkstra[T constraints.Ordered](start, end T, nodes map[T][]*GraphEdge[T]) ([]T, int) {
+	if len(nodes) <= 1 || start == end {
+		return nil, 0
+	}
+
+	addReachableNodes := func(pmap internal.PriorityMap[T], edges []*GraphEdge[T]) {
+		for _, edge := range edges {
+			pmap.Add(math.MaxInt, edge.node)
+		}
+	}
+
+	updateNodes := func(pmap internal.PriorityMap[T], from T, edges []*GraphEdge[T]) {
+		for _, edge := range edges {
+			pmap.UpdateCost(edge.node, from, edge.cost)
+		}
+	}
+
+	priorityVerts := internal.NewPriorityMap[T]()
+	priorityVerts.Add(0, start)
+	for !priorityVerts.HaveVisitAll() {
+		cur := priorityVerts.MinCostVert()
+		addReachableNodes(priorityVerts, nodes[cur])
+		updateNodes(priorityVerts, cur, nodes[cur])
+		priorityVerts.MarkVisited(cur)
+		fmt.Println("CURRRR=> ", cur)
+	}
+
+	path, c := priorityVerts.Path(start, end)
+	return path, c
 }
 
 type GraphEdge[T constraints.Ordered] struct {
