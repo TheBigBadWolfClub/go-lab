@@ -6,6 +6,20 @@ import (
 	"strings"
 )
 
+// Graph
+// done:
+// -implement graph data structure
+// - BFS
+// - DFS
+// - Dijkstra
+// - shortPathUnweighted
+// todos:
+// - union-find
+// - topological sort
+// - prims (spanning tree)
+// - kruskal (spanning tree)
+// - floyd warshall
+
 type Graph[T constraints.Ordered] struct {
 	nodes map[T][]*GraphEdge[T]
 }
@@ -55,6 +69,66 @@ func (g Graph[T]) String() string {
 
 func (g *Graph[T]) Print() {
 	fmt.Println(g)
+}
+
+func (g *Graph[T]) BFSLevelOrder(start T) []T {
+	return graphBFSLevelOrder(start, g.nodes)
+}
+
+func (g *Graph[T]) DFSLevelOrder(start T) []T {
+	return graphDFSLevelOrder(start, g.nodes)
+}
+
+func (g *Graph[T]) ShortPathUnweighted(start T, end T) []T {
+	return shortPathUnweighted(start, end, g.nodes)
+}
+
+func graphBFSLevelOrder[T constraints.Ordered](start T, nodes map[T][]*GraphEdge[T]) []T {
+	if len(nodes) == 0 {
+		return nil
+	}
+	var result []T
+	var queue Queue[*GraphEdge[T]]
+	visited := make(map[T]bool)
+
+	// add first elem and add level one to queue
+	queue.Enqueue(&GraphEdge[T]{node: start})
+	for !queue.IsEmpty() {
+		cursor := (*GraphEdge[T])(queue.Dequeue())
+		if visited[cursor.node] {
+			continue
+		}
+		result = append(result, cursor.node)
+		queue.EnqueueAll(nodes[cursor.node]...)
+		visited[cursor.node] = true
+	}
+	return result
+}
+
+func graphDFSLevelOrder[T constraints.Ordered](start T, nodes map[T][]*GraphEdge[T]) []T {
+	if len(nodes) == 0 {
+		return nil
+	}
+	var result []T
+	var stack Stack[*GraphEdge[T]]
+	visited := make(map[T]bool)
+
+	stack.Push(&GraphEdge[T]{node: start})
+	for !stack.IsEmpty() {
+		cursor := (*GraphEdge[T])(stack.Pop())
+		if visited[cursor.node] {
+			continue
+		}
+		result = append(result, cursor.node)
+		stack.PushAll(nodes[cursor.node]...)
+		visited[cursor.node] = true
+	}
+
+	return result
+}
+
+func shortPathUnweighted[T constraints.Ordered](start, end T, nodes map[T][]*GraphEdge[T]) []T {
+	return nil
 }
 
 type GraphEdge[T constraints.Ordered] struct {

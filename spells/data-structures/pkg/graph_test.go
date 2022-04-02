@@ -118,3 +118,167 @@ func TestGraph_AddEdge(t *testing.T) {
 		})
 	}
 }
+
+func TestGraph_BFSLevelOrder(t *testing.T) {
+
+	tests := []struct {
+		name  string
+		graph *Graph[int]
+		start int
+		want  []int
+	}{
+		{
+			name:  "empty",
+			graph: NewGraph[int](),
+			start: 1,
+			want:  nil,
+		}, {
+			name:  "one node only",
+			graph: buildTestGraph[int]([]int{1}, []edgeCreate[int]{}),
+			start: 1,
+			want:  []int{1},
+		}, {
+			name:  "root and one level v1",
+			graph: buildTestGraph[int]([]int{1, 2}, []edgeCreate[int]{{1, 2, 10}}),
+			start: 1,
+			want:  []int{1, 2},
+		}, {
+			name:  "root and one level v2",
+			graph: buildTestGraph[int]([]int{1, 2, 3}, []edgeCreate[int]{{1, 2, 10}, {1, 3, 10}}),
+			start: 1,
+			want:  []int{1, 2, 3},
+		}, {
+			name: "root and 2 level v2",
+			graph: buildTestGraph[int]([]int{1, 2, 3, 4, 5}, []edgeCreate[int]{
+				{1, 2, 10}, {2, 4, 10}, {4, 5, 10}, {5, 3, 10},
+			}),
+			start: 1,
+			want:  []int{1, 2, 4, 5, 3},
+		}, {
+			name: "root and 2 level v2, inverted",
+			graph: buildTestGraph[int]([]int{1, 2, 3, 4, 5}, []edgeCreate[int]{
+				{1, 2, 10}, {2, 4, 10}, {4, 5, 10}, {5, 3, 10},
+			}),
+			start: 3,
+			want:  []int{3, 5, 4, 2, 1},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.graph.BFSLevelOrder(tt.start)
+			diff := cmp.Diff(tt.want, got)
+			if diff != "" {
+				t.Fatalf("BFSLevelOrder() : %s", diff)
+			}
+		})
+	}
+}
+
+func TestGraph_DFSLevelOrder(t *testing.T) {
+
+	tests := []struct {
+		name  string
+		graph *Graph[int]
+		start int
+		want  []int
+	}{
+		{
+			name:  "empty",
+			graph: NewGraph[int](),
+			start: 1,
+			want:  nil,
+		}, {
+			name:  "one node only",
+			graph: buildTestGraph[int]([]int{1}, []edgeCreate[int]{}),
+			start: 1,
+			want:  []int{1},
+		}, {
+			name:  "root and one level v1",
+			graph: buildTestGraph[int]([]int{1, 2}, []edgeCreate[int]{{1, 2, 10}}),
+			start: 1,
+			want:  []int{1, 2},
+		}, {
+			name:  "root and one level v2",
+			graph: buildTestGraph[int]([]int{1, 2, 3}, []edgeCreate[int]{{1, 2, 10}, {1, 3, 10}}),
+			start: 1,
+			want:  []int{1, 3, 2},
+		}, {
+			name: "root and 2 level v2",
+			graph: buildTestGraph[int]([]int{1, 2, 3, 4, 5}, []edgeCreate[int]{
+				{1, 2, 10}, {2, 3, 10}, {2, 4, 10}, {3, 5, 10}, {4, 5, 10},
+			}),
+			start: 1,
+			want:  []int{1, 2, 4, 5, 3},
+		}, {
+			name: "root and 2 level v2, inverted",
+			graph: buildTestGraph[int]([]int{1, 2, 3, 4, 5}, []edgeCreate[int]{
+				{1, 2, 10}, {2, 4, 10}, {4, 5, 10}, {5, 3, 10},
+			}),
+			start: 3,
+			want:  []int{3, 5, 4, 2, 1},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.graph.DFSLevelOrder(tt.start)
+			diff := cmp.Diff(tt.want, got)
+			if diff != "" {
+				t.Fatalf("BFSLevelOrder() : %s", diff)
+			}
+		})
+	}
+}
+
+func TestGraph_ShortPathUnweighted(t *testing.T) {
+
+	tests := []struct {
+		name  string
+		graph *Graph[int]
+		start int
+		end   int
+		want  []int
+	}{
+		{
+			name:  "empty",
+			graph: NewGraph[int](),
+			start: 1,
+			want:  nil,
+		}, {
+			name:  "one node only",
+			graph: buildTestGraph[int]([]int{1}, []edgeCreate[int]{}),
+			start: 1,
+			end:   1,
+			want:  []int{},
+		}, {
+			name:  "2 nodes",
+			graph: buildTestGraph[int]([]int{1, 2}, []edgeCreate[int]{{1, 2, 10}}),
+			start: 1,
+			end:   2,
+			want:  []int{1, 2},
+		}, {
+			name:  "3 nodes, cyclic",
+			graph: buildTestGraph[int]([]int{1, 2, 3}, []edgeCreate[int]{{1, 2, 10}, {1, 3, 10}, {2, 3, 10}}),
+			start: 1,
+			end:   3,
+			want:  []int{1, 3},
+		}, {
+			name: "2 diff path to end",
+			graph: buildTestGraph[int]([]int{1, 2, 3, 4, 5}, []edgeCreate[int]{
+				{1, 2, 10}, {2, 3, 10}, {3, 4, 10}, {4, 5, 10},
+				{1, 3, 10},
+			}),
+			start: 1,
+			end:   5,
+			want:  []int{1, 3, 4, 5},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.graph.ShortPathUnweighted(tt.start, tt.end)
+			diff := cmp.Diff(tt.want, got)
+			if diff != "" {
+				t.Fatalf("ShortPathUnweighted() : %s", diff)
+			}
+		})
+	}
+}
