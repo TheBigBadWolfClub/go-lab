@@ -78,82 +78,6 @@ func TestSum(t *testing.T) {
 	}
 }
 
-func TestFibonacciNumber(t *testing.T) {
-	type args struct {
-		n uint
-	}
-	tests := []struct {
-		name string
-		args args
-		want uint
-	}{
-		{
-			name: "fibonacci number of 0",
-			args: args{n: 0},
-			want: 0,
-		}, {
-			name: "fibonacci number of 1",
-			args: args{n: 1},
-			want: 1,
-		}, {
-			name: "fibonacci number of 2",
-			args: args{n: 2},
-			want: 1,
-		}, {
-			name: "fibonacci number 5",
-			args: args{n: 5},
-			want: 5,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := FibonacciNumber(tt.args.n); got != tt.want {
-				t.Errorf("FibonacciNumber() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestFibonacciSequence(t *testing.T) {
-	type args struct {
-		n uint
-	}
-	tests := []struct {
-		name string
-		args args
-		want []uint
-	}{
-		{
-			name: "fibonacci of 0",
-			args: args{n: 0},
-			want: []uint{0, 1},
-		}, {
-			name: "fibonacci of 1",
-			args: args{n: 1},
-			want: []uint{0, 1},
-		}, {
-			name: "fibonacci of 2",
-			args: args{n: 2},
-			want: []uint{0, 1, 1},
-		}, {
-			name: "fibonacci of 5",
-			args: args{n: 5},
-			want: []uint{0, 1, 1, 2, 3, 5},
-		}, {
-			name: "fibonacci of 10",
-			args: args{n: 10},
-			want: []uint{0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := FibonacciSequence(tt.args.n); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("FibonacciSequence() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestGreatestCommonDivisor(t *testing.T) {
 	type args struct {
 		x uint
@@ -202,6 +126,118 @@ func TestGreatestCommonDivisor(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := GreatestCommonDivisor(tt.args.x, tt.args.y); got != tt.want {
 				t.Errorf("GreatestCommonDivisor() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFibonacciNumber(t *testing.T) {
+	type args struct {
+		n uint
+	}
+	tests := []struct {
+		name string
+		args args
+		want uint
+	}{
+		{
+			name: "fibonacci number of 0",
+			args: args{n: 0},
+			want: 0,
+		}, {
+			name: "fibonacci number of 1",
+			args: args{n: 1},
+			want: 1,
+		}, {
+			name: "fibonacci number of 2",
+			args: args{n: 2},
+			want: 1,
+		}, {
+			name: "fibonacci number 5",
+			args: args{n: 5},
+			want: 5,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FibonacciNumber(tt.args.n); got != tt.want {
+				t.Errorf("FibonacciNumber() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFibonacciNumberMemoization(t *testing.T) {
+	type args struct {
+		n uint
+	}
+	tests := []struct {
+		name string
+		args args
+		want uint
+	}{
+		{
+			name: "fibonacci number of 0",
+			args: args{n: 0},
+			want: 0,
+		}, {
+			name: "fibonacci number of 1",
+			args: args{n: 1},
+			want: 1,
+		}, {
+			name: "fibonacci number of 2",
+			args: args{n: 2},
+			want: 1,
+		}, {
+			name: "fibonacci number 5",
+			args: args{n: 5},
+			want: 5,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FibonacciNumberMemoization(tt.args.n); got != tt.want {
+				t.Errorf("FibonacciNumberMemoization() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFibonacciSequence(t *testing.T) {
+	type args struct {
+		n uint
+	}
+	tests := []struct {
+		name string
+		args args
+		want []uint
+	}{
+		{
+			name: "fibonacci of 0",
+			args: args{n: 0},
+			want: []uint{0},
+		}, {
+			name: "fibonacci of 1",
+			args: args{n: 1},
+			want: []uint{0, 1},
+		}, {
+			name: "fibonacci of 2",
+			args: args{n: 2},
+			want: []uint{0, 1, 1},
+		}, {
+			name: "fibonacci of 5",
+			args: args{n: 5},
+			want: []uint{0, 1, 1, 2, 3, 5},
+		}, {
+			name: "fibonacci of 10",
+			args: args{n: 10},
+			want: []uint{0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FibonacciSequence(tt.args.n); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("FibonacciSequence() = %v, want %v", got, tt.want)
 			}
 		})
 	}
