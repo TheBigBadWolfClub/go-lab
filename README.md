@@ -38,11 +38,14 @@ Set of tools and private libs to group common functionality required on more tha
 - [config](https://github.com/TheBigBadWolfClub/go-lab/tree/main/spells/config)
 : a configuration file loader for golang apps
 
+- [data-structures](https://github.com/TheBigBadWolfClub/go-lab/tree/main/spells/data-structures)
+: implementation of data structures and algorithms to operate on those structures
+
 - [foundation](https://github.com/TheBigBadWolfClub/go-lab/tree/main/spells/foundation)
-  : some common code, ... ?? keep or delete ??
+: some common code, ... ?? keep or delete ??
 
 - [wolflog](https://github.com/TheBigBadWolfClub/go-lab/tree/main/spells/wolflog)
-  : a go/log wrapper, with extra functionality
+: a go/log wrapper, with extra functionality
 
 
 <hr>
@@ -56,8 +59,9 @@ Set of tools and private libs to group common functionality required on more tha
 
 Small unrelated pieces of GO code, to clarify, make proven of  or deepen the knowledge in GO
 
-- [recursion in go](https://github.com/TheBigBadWolfClub/go-lab/blob/main/riddles/recursion.go)
-- [sort algorithms](https://github.com/TheBigBadWolfClub/go-lab/blob/main/riddles/sort.go)
+- [math algorithms](https://github.com/TheBigBadWolfClub/go-lab/blob/main/riddles/password.go)
+- [string algorithms](https://github.com/TheBigBadWolfClub/go-lab/blob/main/riddles/strings.go)
+- [password constraint generator](https://github.com/TheBigBadWolfClub/go-lab/blob/main/riddles/password.go)
 <hr>
 
 ## Module management
