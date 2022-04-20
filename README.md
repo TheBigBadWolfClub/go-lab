@@ -18,11 +18,15 @@ Some Golang projects, to train/test golang skills
 - [clean-arch](https://github.com/TheBigBadWolfClub/go-lab/tree/main/howls/clean-arch)
 : an implementation of Clean Architecture in Golang
 
+- [dinner-reservation](https://github.com/TheBigBadWolfClub/go-lab/tree/main/howls/dinner-reservation)
+  : simple dinner reservation app (kind of TODO List)
+
 - [Gof4](https://github.com/TheBigBadWolfClub/go-lab/tree/main/howls/Gof4)
 : implementation of some Gang of four patterns in Golang
 
 - [net-scanner](https://github.com/TheBigBadWolfClub/go-lab/tree/main/howls/net-scanner)
 : play with net package (simple tcp port scanner)
+
 
 <hr>
 
