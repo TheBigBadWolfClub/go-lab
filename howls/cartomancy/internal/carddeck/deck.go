@@ -107,7 +107,6 @@ func (d *Deck) BySuit() []Deck {
 // QuerySuite
 // deal cards by Suit, deck is left unchanged
 func (d Deck) QuerySuite(suit SuitStr) (Deck, error) {
-
 	suiteMeta, ok := suit.metadata()
 	if !ok {
 		return Deck{}, fmt.Errorf("not found")
@@ -122,7 +121,7 @@ func (d Deck) QuerySuite(suit SuitStr) (Deck, error) {
 	return cards, nil
 }
 
-//QueryCard
+// QueryCard
 // query a specific cards, deck is left unchanged
 func (d Deck) QueryCard(card CardStr, suit SuitStr) (Card, error) {
 	cardMeta, ok := card.metadata()

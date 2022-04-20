@@ -75,9 +75,11 @@ func NewCard(c CardID, s SuitID) Card {
 func (Card) NumOfSuits() int {
 	return len(SuitMeta.all(STATIC))
 }
+
 func (Card) NumOfCardType() int {
 	return len(CardMeta.all(STATIC))
 }
+
 func (Card) NumOfCards() int {
 	return Card{}.NumOfCardType() * Card{}.NumOfSuits()
 }
@@ -131,7 +133,6 @@ func (c Card) GoString() string {
 }
 
 func (c Card) CompareTo(c2 Card) int {
-
 	r1, _ := strconv.Atoi(string(c.Rank))
 	r2, _ := strconv.Atoi(string(c2.Rank))
 

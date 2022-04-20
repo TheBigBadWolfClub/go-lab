@@ -2,6 +2,7 @@ package wargame
 
 import (
 	"fmt"
+
 	"github.com/TheBigBadWolfClub/go-lab/howls/cartomancy/internal/carddeck"
 )
 
@@ -28,9 +29,11 @@ func (r *round) addHand(h hand) {
 	r.hands = append(r.hands, h)
 	fmt.Printf("%d: %s \n", h.id, h.card)
 }
+
 func (r *round) addStats(s stats) {
 	r.stats = append(r.stats, s)
 }
+
 func (r *round) findHandWinner() {
 	winHand := r.hands[0]
 	for i := 1; i < len(r.hands); i++ {
@@ -43,6 +46,7 @@ func (r *round) findHandWinner() {
 	fmt.Printf("win: %d: %s \n", winHand.id, winHand.card)
 	r.winner = winHand.id
 }
+
 func (r *round) cards() []carddeck.Card {
 	var cards []carddeck.Card
 	for _, h := range r.hands {
@@ -71,20 +75,23 @@ func NewGame() *Game {
 		table:   &table{},
 	}
 }
+
 func (g *Game) Play() {
 	g.start()
 }
+
 func (g *Game) Setup() {
 	g.setupPlayers()
 	g.setupTable()
-
 }
+
 func (g *Game) setupTable() {
 	g.table.playerHands = make(chan hand, len(g.players))
 	g.table.playerStats = make(chan stats, len(g.players))
 	g.table.players = g.players
 	g.table.claimWinner = make(chan int)
 }
+
 func (g *Game) setupPlayers() {
 	for i, pid := range ids {
 		player := Player{
@@ -98,6 +105,7 @@ func (g *Game) setupPlayers() {
 		g.players = append(g.players, &player)
 	}
 }
+
 func (g *Game) start() {
 	decks := g.dealer.ByPlayer()
 	g.players.start(decks)
@@ -114,6 +122,7 @@ func (p *Players) askPlayerAction(action playerAction) {
 		pl.actionChan <- action
 	}
 }
+
 func (p *Players) start(decks carddeck.Round) {
 	for i, pl := range *p {
 		pl.cards.Empty()

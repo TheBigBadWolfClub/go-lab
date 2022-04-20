@@ -91,7 +91,6 @@ func Test_PasswordGenerator(t *testing.T) {
 			if total := countFn(got, special); tt.wantErr == nil && total < tt.minSpec {
 				t.Errorf("PasswordGenerator() chars expected=%d, got=%d", tt.minSpec, total)
 			}
-
 		})
 	}
 }

@@ -7,13 +7,14 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/TheBigBadWolfClub/go-lab/howls/dinner-reservation/internal/reservation"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/TheBigBadWolfClub/go-lab/howls/dinner-reservation/internal/reservation"
 
 	"github.com/TheBigBadWolfClub/go-lab/howls/dinner-reservation/internal/client"
 	"github.com/TheBigBadWolfClub/go-lab/howls/dinner-reservation/internal/table"
@@ -157,7 +158,6 @@ func Test_Handler_POST(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-
 			// prepare request
 			w := httptest.NewRecorder()
 			var req *http.Request

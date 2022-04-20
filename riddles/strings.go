@@ -26,7 +26,7 @@ func sumAllNumbers(str string) int {
 	return sumAllNumbers(str[1:])
 }
 
-//maxNumeric
+// maxNumeric
 // Given an alphanumeric string,
 // extract maximum numeric value from that string.
 func maxNumeric(str string) int {
@@ -59,8 +59,8 @@ func duplicatedChars(str string) []string {
 	return res
 }
 
-//areAnagrams
-//two strings are anagrams of each other
+// areAnagrams
+// two strings are anagrams of each other
 func areAnagrams(str1, str2 string) bool {
 	if len(str1) != len(str2) {
 		return false
@@ -80,10 +80,9 @@ func areAnagrams(str1, str2 string) bool {
 	return true
 }
 
-//allPermutations
-//find all the permutations of a string
+// allPermutations
+// find all the permutations of a string
 func allPermutations(str string, left int) []string {
-
 	if left == len(str)-1 {
 		return []string{str}
 	}
@@ -98,11 +97,10 @@ func allPermutations(str string, left int) []string {
 		strs = append(strs, x...)
 	}
 	return strs
-
 }
 
-//reverseRecursion
-//given string be reversed using recursion
+// reverseRecursion
+// given string be reversed using recursion
 func reverseRecursion(str string) string {
 	if len(str) <= 1 {
 		return str
@@ -111,7 +109,7 @@ func reverseRecursion(str string) string {
 	return str[len(str)-1:] + reverseRecursion(str[:len(str)-1])
 }
 
-//count the occurrence of a given character in a string
+// count the occurrence of a given character in a string
 func countCharOccurrences(str string, char uint8) int {
 	if len(str) == 0 {
 		return 0
@@ -123,7 +121,7 @@ func countCharOccurrences(str string, char uint8) int {
 	return countCharOccurrences(str[1:], char)
 }
 
-//firstNonRepeatable
+// firstNonRepeatable
 // first non-repeated character from a string
 func firstNonRepeatable(str string) int32 {
 	m := make(map[int32]int)
@@ -166,10 +164,9 @@ func areRotation(strA, strB string) bool {
 	return false
 }
 
-//isPalindrome
-//check if a given string is a palindrome
+// isPalindrome
+// check if a given string is a palindrome
 func isPalindrome(str string) bool {
-
 	if len(str) <= 1 {
 		return true
 	}
@@ -215,7 +212,6 @@ func longestPalindrome(str string) string {
 // findLongestSubstring
 // find the length of the longest substring without repeating characters
 func findLongestSubstring(str string) string {
-
 	maxStrs := []string{""}
 	var i int
 	for _, c := range str {
@@ -233,7 +229,6 @@ func findLongestSubstring(str string) string {
 	}
 
 	return maxStrs[len(maxStrs)-1]
-
 }
 
 // removeDuplicate
@@ -249,9 +244,8 @@ func removeDuplicate(str string) string {
 }
 
 // findMaxWordOccurring
-//Given an array of strings, find the most frequent word in a given array
+// Given an array of strings, find the most frequent word in a given array
 func findMaxWordOccurring(text []string) string {
-
 	counter := make(map[string]int)
 	for _, str := range text {
 		for _, word := range strings.Split(str, " ") {

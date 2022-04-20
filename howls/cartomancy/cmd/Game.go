@@ -5,9 +5,7 @@ import (
 )
 
 func main() {
-
 	game := wargame.NewGame()
 	game.Setup()
 	game.Play()
-
 }

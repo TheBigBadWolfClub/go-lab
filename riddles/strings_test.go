@@ -1,28 +1,25 @@
 package riddles
 
 import (
-	"github.com/google/go-cmp/cmp"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 const stringsTest = "test"
 
 func Test_sumAllNumbers(t *testing.T) {
-
 	tests := []struct {
 		str  string
 		want int
 	}{
 		{
-
 			str:  "hello",
 			want: 0,
 		}, {
-
 			str:  "12345",
 			want: 15,
 		}, {
-
 			str:  "1aBc5",
 			want: 6,
 		},
@@ -37,21 +34,17 @@ func Test_sumAllNumbers(t *testing.T) {
 }
 
 func Test_maxNumeric(t *testing.T) {
-
 	tests := []struct {
 		str  string
 		want int
 	}{
 		{
-
 			str:  "hello",
 			want: 0,
 		}, {
-
 			str:  "12345",
 			want: 5,
 		}, {
-
 			str:  "1aBc5V",
 			want: 5,
 		},
@@ -71,11 +64,9 @@ func Test_duplicatedChars(t *testing.T) {
 		want []string
 	}{
 		{
-
 			str:  "edecba",
 			want: []string{"e"},
 		}, {
-
 			str:  "abccdeff",
 			want: []string{"c", "f"},
 		},
@@ -91,39 +82,32 @@ func Test_duplicatedChars(t *testing.T) {
 }
 
 func Test_areAnagrams(t *testing.T) {
-
 	tests := []struct {
 		str1 string
 		str2 string
 		want bool
 	}{
 		{
-
 			str1: "",
 			str2: "",
 			want: true,
 		}, {
-
 			str1: "hello",
 			str2: "holle",
 			want: true,
 		}, {
-
 			str1: "army",
 			str2: "mary",
 			want: true,
 		}, {
-
 			str1: "army",
 			str2: "mari",
 			want: false,
 		}, {
-
 			str1: "army",
 			str2: "irma",
 			want: false,
 		}, {
-
 			str1: "aaa",
 			str2: "aaa",
 			want: true,
@@ -144,15 +128,12 @@ func Test_allPermutations(t *testing.T) {
 		want []string
 	}{
 		{
-
 			str:  "a",
 			want: []string{"a"},
 		}, {
-
 			str:  "ab",
 			want: []string{"ab", "ba"},
 		}, {
-
 			str:  "abc",
 			want: []string{"abc", "acb", "bac", "bca", "cba", "cab"},
 		},
@@ -173,11 +154,9 @@ func Test_reverseRecursion(t *testing.T) {
 		want string
 	}{
 		{
-
 			str:  "hello",
 			want: "olleh",
 		}, {
-
 			str:  "software",
 			want: "erawtfos",
 		},
@@ -193,7 +172,6 @@ func Test_reverseRecursion(t *testing.T) {
 }
 
 func Test_countCharOccurrences(t *testing.T) {
-
 	tests := []struct {
 		str  string
 		char uint8
@@ -223,7 +201,6 @@ func Test_countCharOccurrences(t *testing.T) {
 }
 
 func Test_firstNonRepeatable(t *testing.T) {
-
 	tests := []struct {
 		str  string
 		want int32
@@ -254,15 +231,12 @@ func Test_reverseWords(t *testing.T) {
 		want string
 	}{
 		{
-
 			str:  "hello world",
 			want: "world hello",
 		}, {
-
 			str:  "good morning nice people",
 			want: "people nice morning good",
 		}, {
-
 			str:  "good morning nice people again",
 			want: "again people nice morning good",
 		},
@@ -284,17 +258,14 @@ func Test_areRotation(t *testing.T) {
 		want bool
 	}{
 		{
-
 			strA: "programing",
 			strB: "ingprogram",
 			want: true,
 		}, {
-
 			strA: "programing",
 			strB: "ingprograX",
 			want: false,
 		}, {
-
 			strA: "programing",
 			strB: "ingprogra",
 			want: false,
@@ -316,19 +287,15 @@ func Test_isPalindrome(t *testing.T) {
 		want bool
 	}{
 		{
-
 			strA: "ana",
 			want: true,
 		}, {
-
 			strA: "anana",
 			want: true,
 		}, {
-
 			strA: "anaa",
 			want: false,
 		}, {
-
 			strA: "abana",
 			want: false,
 		},
@@ -378,19 +345,15 @@ func Test_findLongestSubstring(t *testing.T) {
 		want string
 	}{
 		{
-
 			strA: "",
 			want: "",
 		}, {
-
 			strA: "abcdeefg",
 			want: "abcde",
 		}, {
-
 			strA: "abb123456bba",
 			want: "b123456",
 		}, {
-
 			strA: "asdfg",
 			want: "asdfg",
 		},
@@ -411,23 +374,18 @@ func Test_removeDuplicate(t *testing.T) {
 		want string
 	}{
 		{
-
 			strA: "",
 			want: "",
 		}, {
-
 			strA: "abccd",
 			want: "abcd",
 		}, {
-
 			strA: "abbcdde",
 			want: "abcde",
 		}, {
-
 			strA: "aabcc",
 			want: "abc",
 		}, {
-
 			strA: "abcabc",
 			want: "abc",
 		},
@@ -443,7 +401,6 @@ func Test_removeDuplicate(t *testing.T) {
 }
 
 func Test_findMaxWordOccurring(t *testing.T) {
-
 	tests := []struct {
 		str  []string
 		want string

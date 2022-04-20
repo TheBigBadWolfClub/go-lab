@@ -26,16 +26,16 @@ type deal struct {
 func NewDeal(rules Rules) *deal {
 	return &deal{deck: Deck{}, rules: rules}
 }
+
 func (d deal) ByPlayer() Round {
 	d.deck.Reset()
 	d.deck.Shuffle()
 	return d.dealBy()
 }
 
-//dealBy
+// dealBy
 // deal nCards per nPlayers
 func (d *deal) dealBy() Round {
-
 	subDeckSize := d.rules.decksSize(len(d.deck))
 	deals := Round{
 		Decks: make([]Deck, d.rules.NumDecks),

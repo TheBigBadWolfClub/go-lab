@@ -4,10 +4,11 @@ package reservation
 import (
 	"encoding/json"
 	"errors"
-	"github.com/TheBigBadWolfClub/go-lab/howls/dinner-reservation/internal/client"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/TheBigBadWolfClub/go-lab/howls/dinner-reservation/internal/client"
 
 	"github.com/TheBigBadWolfClub/go-lab/howls/dinner-reservation/internal"
 )

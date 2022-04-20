@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/TheBigBadWolfClub/go-lab/howls/dinner-reservation/internal/reservation"
 	"log"
 	"net/http"
+
+	"github.com/TheBigBadWolfClub/go-lab/howls/dinner-reservation/internal/reservation"
 
 	"github.com/TheBigBadWolfClub/go-lab/howls/dinner-reservation/internal/client"
 	"github.com/TheBigBadWolfClub/go-lab/howls/dinner-reservation/internal/middlewares"
@@ -54,7 +55,6 @@ func main() {
 // Open creates a new connection pool to SQL database
 // for the given configuration.
 func Open() *sqlx.DB {
-
 	db, err := sqlx.Open(drive, fmt.Sprintf("%s:%s@/%s", username, password, database))
 	if err != nil {
 		log.Fatalf("fail to connect to db: %v", err)
