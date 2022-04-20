@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  party-app:
+    build:
+      context: ./
+      dockerfile: build/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - store
+    ports:
+      - 8080:8080
+
+  store:
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_DATABASE: database
+    ports:
+      - 3306:3306
+    volumes:
+      - "./build/dump.sql:/docker-entrypoint-initdb.d/dump.sql"
+
