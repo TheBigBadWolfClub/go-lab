@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"errors"
-	"github.com/TheBigBadWolfClub/go-lab/howls/instrumentation/internal/config/otelcfg"
-	"github.com/TheBigBadWolfClub/go-lab/howls/instrumentation/internal/presentation"
-	"github.com/TheBigBadWolfClub/go-lab/howls/instrumentation/internal/shared/telemetry"
+	"github.com/TheBigBadWolfClub/go-lab/howls/telemetry/internal/config/otelcfg"
+	"github.com/TheBigBadWolfClub/go-lab/howls/telemetry/internal/presentation"
+	"github.com/TheBigBadWolfClub/go-lab/howls/telemetry/internal/shared/telemetry"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 
 	"log"

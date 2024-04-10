@@ -2,7 +2,7 @@ package core
 
 import (
 	"context"
-	"github.com/TheBigBadWolfClub/go-lab/howls/instrumentation/internal/shared/telemetry"
+	"github.com/TheBigBadWolfClub/go-lab/howls/telemetry/internal/shared/telemetry"
 	"go.opentelemetry.io/otel/metric"
 	"math/rand"
 	"time"

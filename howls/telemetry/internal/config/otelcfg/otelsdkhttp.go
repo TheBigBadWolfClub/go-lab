@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-const otelEndpointKey = "OTEL_EXPORTER_OTLP_ENDPOINT"
+const otelEndpointKey = "OTEL_COLLECTOR_ENDPOINT"
 
 func getEnvVariable(key string) (string, bool) {
 	value, exists := os.LookupEnv(key)
