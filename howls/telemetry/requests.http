@@ -1,0 +1,9 @@
+### GET request with a header
+// @no-log
+GET http://localhost:8091/api/v1/rolldice
+Accept: application/json
+
+### GET request with a header
+// @no-log
+GET http://localhost:8091/api/v1/dealer?number_of_rolls=100
+Accept: application/json

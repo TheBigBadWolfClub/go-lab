@@ -18,6 +18,9 @@ Some Golang projects, to train/test golang skills
 - [clean-arch](https://github.com/TheBigBadWolfClub/go-lab/tree/main/howls/clean-arch)
 : an implementation of Clean Architecture in Golang
 
+- [cqrs](https://github.com/TheBigBadWolfClub/go-lab/tree/main/howls/cqrs)
+: an implementation of CQRS Architecture pattern in Golang
+
 - [dinner-reservation](https://github.com/TheBigBadWolfClub/go-lab/tree/main/howls/dinner-reservation)
   : simple dinner reservation app (kind of TODO List)
 
@@ -27,6 +30,8 @@ Some Golang projects, to train/test golang skills
 - [net-scanner](https://github.com/TheBigBadWolfClub/go-lab/tree/main/howls/net-scanner)
 : play with net package (simple tcp port scanner)
 
+- [telemetry](https://github.com/TheBigBadWolfClub/go-lab/tree/main/howls/telemetry)
+: test opentelemetry with a simple dice roller app
 
 <hr>
 
