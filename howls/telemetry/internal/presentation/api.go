@@ -60,8 +60,8 @@ func (a *api) DiceRoller(w http.ResponseWriter, r *http.Request) {
 	defer span.End()
 
 	// API active clients
-	a.metricUpDownCounter(spanCtx, 1)
-	defer a.metricUpDownCounter(spanCtx, -1)
+	a.addAddActiveClient(spanCtx)
+	defer a.removeActiveClient(spanCtx)
 
 	nDices := 2
 	valuesChan := make(chan int, nDices)
@@ -121,8 +121,14 @@ func (a *api) timedSrvCall(ctx context.Context) int {
 	return roll
 }
 
-func (a *api) metricUpDownCounter(ctx context.Context, value int) {
-	a.apiActiveClients.Add(ctx, int64(value))
+func (a *api) addAddActiveClient(ctx context.Context) {
+	a.logger.Printf("ADD::apiActiveClients: %d", 1)
+	a.apiActiveClients.Add(ctx, int64(1))
+}
+
+func (a *api) removeActiveClient(ctx context.Context) {
+	a.logger.Printf("SUBS::apiActiveClients: %d", -1)
+	a.apiActiveClients.Add(ctx, int64(-1))
 }
 
 func (a *api) metricCounter(ctx context.Context, rollValueAttr attribute.KeyValue) {
