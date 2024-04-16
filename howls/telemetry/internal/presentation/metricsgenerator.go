@@ -16,10 +16,13 @@ type GeneratorAPI interface {
 }
 
 type generatorApi struct {
+	logger *log.Logger
 }
 
-func NewGeneratorAPI() GeneratorAPI {
-	return &generatorApi{}
+func NewGeneratorAPI(l *log.Logger) GeneratorAPI {
+	return &generatorApi{
+		logger: l,
+	}
 }
 
 func (a *generatorApi) GenerateDiceRollers(w http.ResponseWriter, r *http.Request) {
@@ -32,7 +35,7 @@ func (a *generatorApi) GenerateDiceRollers(w http.ResponseWriter, r *http.Reques
 
 	nRolls, err := strconv.Atoi(nRollsStr)
 	if err != nil {
-		log.Printf("Error converting string to int: %v\n", err)
+		a.logger.Printf("Error converting string to int: %v\n", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -45,7 +48,12 @@ func (a *generatorApi) GenerateDiceRollers(w http.ResponseWriter, r *http.Reques
 		go func() {
 			resp, err := http.Get("http://localhost:8091/api/v1/rolldice")
 			if err != nil {
-				results <- 505
+				results <- http.StatusInternalServerError
+				return
+			}
+
+			if resp.StatusCode != http.StatusOK {
+				results <- resp.StatusCode
 				return
 			}
 
@@ -53,7 +61,7 @@ func (a *generatorApi) GenerateDiceRollers(w http.ResponseWriter, r *http.Reques
 			strData := string(data)
 			intValue, err := strconv.Atoi(strings.ReplaceAll(strData, "\n", ""))
 			if err != nil {
-				results <- 505
+				results <- http.StatusServiceUnavailable
 				return
 			}
 

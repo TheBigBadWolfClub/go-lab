@@ -68,6 +68,7 @@ func run() (err error) {
 }
 
 func newHTTPHandler() http.Handler {
+	logger := log.New(os.Stdout, "INFO: ", log.LstdFlags)
 	mux := http.NewServeMux()
 
 	// handleFunc is a replacement for mux.HandleFunc
@@ -81,10 +82,10 @@ func newHTTPHandler() http.Handler {
 	newTelemetry := telemetry.NewTelemetry("dice-roller")
 
 	// Register handlers.
-	api := presentation.NewAPI(newTelemetry)
+	api := presentation.NewAPI(newTelemetry, logger)
 	handleFunc("/api/v1/rolldice", api.DiceRoller)
 
-	generatorAPI := presentation.NewGeneratorAPI()
+	generatorAPI := presentation.NewGeneratorAPI(logger)
 	handleFunc("/api/v1/dealer", generatorAPI.GenerateDiceRollers)
 
 	// Add HTTP instrumentation for the whole server.
