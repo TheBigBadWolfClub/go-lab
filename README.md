@@ -73,6 +73,14 @@ Small unrelated pieces of GO code, to clarify, make proven of  or deepen the kno
 - [password constraint generator](https://github.com/TheBigBadWolfClub/go-lab/blob/main/riddles/password.go)
 <hr>
 
+### Alchemy
+
+>__alchemy /ˈalkɪmi/__
+><br>a seemingly magical process of transformation, creation, or combination. 
+><br>*"Finding the right mix of technologies felt like alchemy."*  
+
+Embodying the spirit of turning base materials into gold through the application of generative AI and advanced programming techniques.
+
 ## Module management
 
 #### create
