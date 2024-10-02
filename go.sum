@@ -1,2 +1,4 @@
 github.com/go-chi/chi/v5 v5.0.5 h1:l3RJ8T8TAqLsXFfah+RA6N4pydMbPwSdvNM+AFWvLUM=
 github.com/go-chi/chi/v5 v5.0.5/go.mod h1:DslCQbL2OYiznFReuXYUmQ2hGd1aDpCnlMNITLSKoi8=
+github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
+github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
