@@ -1,4 +1,4 @@
-package internal
+package gophermorphic
 
 import (
 	"github.com/stretchr/testify/assert"
