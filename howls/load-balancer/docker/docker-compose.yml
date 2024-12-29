@@ -1,0 +1,40 @@
+services:
+  workers:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: worker
+    ports:
+      - "8080"
+    environment:
+      - REPLICA_ID="{{.Task.Slot}}"
+      - PORT=8080
+      - LOAD_BALANCER_ADDRESS=http://load-balancer
+      - TICK_RETRY=5m
+      - REGISTER_RETRY=2s
+    deploy:
+      replicas: 3
+    networks:
+      - private_net
+
+  load-balancer:
+    hostname: load-balancer
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: load-balancer
+    ports:
+      - "80:80"
+    deploy:
+      replicas: 1
+    networks:
+        - private_net
+
+
+networks:
+  private_net:
+    name: my_private_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.238.0/24

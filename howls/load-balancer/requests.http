@@ -1,0 +1,8 @@
+
+### GET request to example server
+// @no-log
+GET http://localhost:80
+
+### GET stats
+// @no-log
+GET http://localhost:80/stats
